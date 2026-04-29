@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GCSE Computing Flashcard Sprint</title>
+  <meta name="theme-color" content="#111827" />
+  <meta name="description" content="Fast GCSE Computer Science flashcard revision with student topic selection." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d6dce8;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #047857;
+      --amber: #b45309;
+      --danger: #b91c1c;
+      --soft-blue: #eff6ff;
+      --soft-success: #ecfdf5;
+      --soft-amber: #fffbeb;
+      --soft-danger: #fef2f2;
+      --code-bg: #0f172a;
+      --code-text: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #e8eef8 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 1.8rem 1rem 2.2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+    }
+
+    header p {
+      margin: 0;
+      color: #d1d5db;
+      font-size: 1.05rem;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: -1.2rem auto 0;
+      padding: 1.25rem;
+    }
+
+    .panel, .flashcard, .controls, .summary-panel, .topic-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .top-panel {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel, .topic-panel { padding: 1.1rem; }
+
+    .panel h2, .topic-panel h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.2rem;
+    }
+
+    .panel p, .topic-panel p {
+      margin: 0.25rem 0;
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.8rem;
+    }
+
+    .stat {
+      background: var(--soft-blue);
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      color: #1e3a8a;
+    }
+
+    .stat span {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .controls {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      align-items: end;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 1rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+    }
+
+    button:hover { background: var(--primary-dark); }
+    button.secondary { background: #e5e7eb; color: #111827; }
+    button.secondary:hover { background: #d1d5db; }
+    button.success { background: var(--success); }
+    button.success:hover { background: #065f46; }
+    button.amber { background: var(--amber); }
+    button.amber:hover { background: #92400e; }
+    button.danger { background: var(--danger); }
+    button.danger:hover { background: #991b1b; }
+
+    .topic-panel {
+      margin-bottom: 1rem;
+    }
+
+    .topic-panel details summary {
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .topic-panel details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .topic-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 900;
+    }
+
+    .topic-summary span {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .topic-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .topic-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .topic-choice {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.65rem;
+      background: #f8fafc;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .topic-choice input {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: var(--primary);
+    }
+
+    .coverage-note {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 14px;
+      background: var(--soft-blue);
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      font-weight: 800;
+    }
+
+    .flashcard {
+      padding: 1.2rem;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.32rem 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      border: 1px solid #bfdbfe;
+      background: var(--soft-blue);
+      color: #1e3a8a;
+    }
+
+    .tag.paper2 {
+      border-color: #bbf7d0;
+      background: var(--soft-success);
+      color: #166534;
+    }
+
+    .tag.weak {
+      border-color: #fecaca;
+      background: var(--soft-danger);
+      color: var(--danger);
+    }
+
+    .progress-text {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .prompt {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      font-size: clamp(1.25rem, 3vw, 1.7rem);
+      font-weight: 900;
+      margin-bottom: 0.9rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 0.9rem;
+      border-radius: 14px;
+      overflow-x: auto;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      margin: 0 0 0.9rem;
+    }
+
+    .answer {
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      background: #fff;
+      margin-top: 0.4rem;
+    }
+
+    .answer h3 {
+      margin: 0.2rem 0 0.35rem;
+      font-size: 1rem;
+    }
+
+    .answer p, .answer ul {
+      margin-top: 0.25rem;
+    }
+
+    .exam-tip {
+      margin-top: 0.8rem;
+      padding: 0.8rem;
+      border-radius: 14px;
+      background: var(--soft-amber);
+      border: 1px solid #fde68a;
+      color: #78350f;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+
+    .summary-panel {
+      display: none;
+      padding: 1.1rem;
+      margin-top: 1rem;
+      background: var(--soft-success);
+      border-color: #a7f3d0;
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    .bank-panel {
+      margin-top: 1.25rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1rem;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .bank-list {
+      margin-top: 0.8rem;
+      display: grid;
+      gap: 0.55rem;
+      max-height: 420px;
+      overflow: auto;
+    }
+
+    .bank-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+      background: #f8fafc;
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .top-panel { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      main { padding: 0.85rem; }
+    }
+
+    @media (max-width: 560px) {
+      .flashcard { min-height: 480px; }
+      .card-actions button, .topic-actions button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GCSE Computing Flashcard Sprint</h1>
+    <p>Fast recall practice with topic choices for where you are in the course.</p>
+  </header>
+
+  <main>
+    <section class="top-panel" aria-label="Revision summary">
+      <div class="panel">
+        <h2>Choose what you have covered</h2>
+        <p>Select the topics you want included. Your choices are saved on this device.</p>
+        <p>Use <strong>Final revision mode</strong> when you want every card available.</p>
+      </div>
+      <div class="panel">
+        <h2>Your sprint stats</h2>
+        <div class="stats">
+          <div class="stat"><strong id="todayDone">0</strong><span>Done today</span></div>
+          <div class="stat"><strong id="currentStreak">0</strong><span>Daily streak</span></div>
+          <div class="stat"><strong id="weakCount">0</strong><span>Weak cards</span></div>
+          <div class="stat"><strong id="sessionScore">0</strong><span>This session</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="topic-panel" aria-label="Specification area selection">
+      <details id="topicDetails">
+        <summary class="topic-summary">
+          <div>
+            <h2>Specification areas to include</h2>
+            <span id="topicSummaryText">Show or hide topic choices</span>
+          </div>
+          <span>▾</span>
+        </summary>
+        <div class="topic-top">
+          <div>
+            <p>Untick areas you have not covered yet. These choices are saved on this device.</p>
+          </div>
+          <div class="topic-actions">
+            <button id="selectAllButton" class="secondary">Select all</button>
+            <button id="clearAllButton" class="secondary">Clear all</button>
+            <button id="finalRevisionButton">Final revision mode</button>
+          </div>
+        </div>
+        <div id="topicGrid" class="topic-grid"></div>
+      </details>
+      <div id="coverageNote" class="coverage-note">Selected specification areas: 0</div>
+    </section>
+
+    <section class="controls" aria-label="Flashcard controls">
+      <div>
+        <label for="modeSelect">Mode</label>
+        <select id="modeSelect">
+          <option value="daily10">Daily 10</option>
+          <option value="weak">Weakest first</option>
+          <option value="sprint">Topic sprint</option>
+          <option value="all">All selected cards</option>
+        </select>
+      </div>
+      <div>
+        <label for="paperSelect">Paper</label>
+        <select id="paperSelect">
+          <option value="all">All</option>
+          <option value="Paper 1">Paper 1</option>
+          <option value="Paper 2">Paper 2</option>
+        </select>
+      </div>
+      <button id="startButton">Start sprint</button>
+    </section>
+
+    <section class="flashcard" aria-live="polite">
+      <div class="card-meta">
+        <div class="tag-row" id="tagRow"></div>
+        <div class="progress-text" id="progressText">Card 0 / 0</div>
+      </div>
+      <div class="prompt" id="prompt">Choose your topics, then start your sprint.</div>
+      <div id="codeBlock"></div>
+      <div class="answer" id="answerBox"></div>
+      <div class="card-actions">
+        <button id="revealButton">Reveal answer</button>
+        <button id="gotItButton" class="success">Got it</button>
+        <button id="nearlyButton" class="amber">Nearly</button>
+        <button id="reviseButton" class="danger">Revise again</button>
+        <button id="skipButton" class="secondary">Skip</button>
+      </div>
+    </section>
+
+    <section class="summary-panel" id="summaryPanel"></section>
+
+    <section class="bank-panel">
+      <details>
+        <summary>Teacher preview: flashcard bank</summary>
+        <div id="bankList" class="bank-list"></div>
+      </details>
+    </section>
+
+    <footer>
+      <p>Suggested routine: select covered topics, complete Daily 10, then repeat weak cards.</p>
+    </footer>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "gcseComputingFlashcardsWithTopicsV1";
+
+    const flashcards = [
+      { id: "p1-001", paper: "Paper 1", topic: "CPU", type: "Definition", front: "What is the purpose of the CPU?", back: "The CPU executes instructions, performs calculations and controls the flow of data around the computer system.", tip: "Use the words execute, process and control." },
+      { id: "p1-002", paper: "Paper 1", topic: "CPU", type: "Component", front: "What does the ALU do?", back: "The Arithmetic Logic Unit performs arithmetic operations and logical comparisons such as AND, OR and NOT.", tip: "Do not confuse this with the Control Unit." },
+      { id: "p1-003", paper: "Paper 1", topic: "CPU", type: "Component", front: "What does the Control Unit do?", back: "It controls the execution of instructions and coordinates the activity of the CPU and other components.", tip: "Think: fetch, decode, execute control." },
+      { id: "p1-004", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the Program Counter?", back: "It stores the memory address of the next instruction to be fetched.", tip: "PC means next instruction address." },
+      { id: "p1-005", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the Accumulator?", back: "It temporarily stores the results of calculations performed by the ALU.", tip: "Accumulator = temporary calculation result." },
+      { id: "p1-006", paper: "Paper 1", topic: "CPU performance", type: "Explain", front: "How can increasing clock speed improve performance?", back: "A higher clock speed means more cycles per second, so the CPU may be able to execute more instructions in the same time.", tip: "Say 'may' because other factors also affect performance." },
+      { id: "p1-007", paper: "Paper 1", topic: "CPU performance", type: "Explain", front: "How can more cache improve CPU performance?", back: "Cache is very fast memory close to the CPU. More cache can reduce the need to fetch data from slower RAM.", tip: "Cache is faster than RAM, but smaller." },
+      { id: "p1-008", paper: "Paper 1", topic: "Memory", type: "Compare", front: "Give one difference between RAM and ROM.", back: "RAM is volatile and stores currently used programs/data. ROM is non-volatile and stores boot instructions or firmware.", tip: "Use direct comparison: RAM..., whereas ROM..." },
+      { id: "p1-009", paper: "Paper 1", topic: "Memory", type: "Definition", front: "What is virtual memory?", back: "Virtual memory is part of secondary storage used as extra memory when RAM is full.", tip: "Remember: it is slower than RAM." },
+      { id: "p1-010", paper: "Paper 1", topic: "Storage", type: "Compare", front: "Why is an SSD usually faster than an HDD?", back: "An SSD has no moving parts and accesses data electronically, giving faster access times than an HDD.", tip: "Do not say it is faster because it has more capacity." },
+      { id: "p1-011", paper: "Paper 1", topic: "Storage", type: "Factors", front: "Name three factors affecting the choice of secondary storage.", back: "Capacity, speed, cost, portability, durability, reliability and power consumption are possible factors.", tip: "Factors, not examples of devices." },
+      { id: "p1-012", paper: "Paper 1", topic: "Networks", type: "Definition", front: "What is a LAN?", back: "A Local Area Network covers a small geographical area such as a school, home or office.", tip: "Small area = LAN." },
+      { id: "p1-013", paper: "Paper 1", topic: "Networks", type: "Definition", front: "What is a WAN?", back: "A Wide Area Network covers a large geographical area and often connects multiple LANs.", tip: "The internet is the largest WAN." },
+      { id: "p1-014", paper: "Paper 1", topic: "Networks", type: "Device", front: "What does a router do?", back: "A router connects networks together and forwards data packets between them using suitable routes.", tip: "Router = between networks." },
+      { id: "p1-015", paper: "Paper 1", topic: "Networks", type: "Device", front: "What does a switch do?", back: "A switch connects devices on a LAN and forwards data to the correct device using MAC addresses.", tip: "Switch = within a LAN." },
+      { id: "p1-016", paper: "Paper 1", topic: "Networks", type: "Topology", front: "Give one advantage of a star topology.", back: "If one cable or device fails, the rest of the network can usually continue working. It is also easier to add devices and identify faults.", tip: "Do not ignore the central switch weakness." },
+      { id: "p1-017", paper: "Paper 1", topic: "Network security", type: "Security", front: "How does a firewall protect a network?", back: "It monitors incoming and outgoing traffic and uses rules to allow or block traffic.", tip: "Firewall is not antivirus." },
+      { id: "p1-018", paper: "Paper 1", topic: "Network security", type: "Security", front: "What is encryption?", back: "Encryption converts data into an unreadable form so it cannot be understood without the correct key.", tip: "It does not stop interception; it protects meaning." },
+      { id: "p1-019", paper: "Paper 1", topic: "Cyber security", type: "Threat", front: "What is phishing?", back: "Phishing uses fake messages or websites to trick users into revealing sensitive information.", tip: "Key idea: deception." },
+      { id: "p1-020", paper: "Paper 1", topic: "Cyber security", type: "Threat", front: "What is malware?", back: "Malware is malicious software designed to damage, disrupt, steal data or gain unauthorised access.", tip: "Examples include viruses, worms, Trojans and ransomware." },
+      { id: "p1-021", paper: "Paper 1", topic: "System software", type: "Function", front: "Name three functions of an operating system.", back: "User interface, memory management, file management, device management, process management, security and user accounts.", tip: "Application software is not the same as system software." },
+      { id: "p1-022", paper: "Paper 1", topic: "Data representation", type: "Definition", front: "What is a bit?", back: "A bit is a binary digit: either 0 or 1.", tip: "8 bits = 1 byte." },
+      { id: "p1-023", paper: "Paper 1", topic: "Data representation", type: "Hex", front: "Why is hexadecimal used by programmers?", back: "It is shorter than binary, easier for humans to read, and maps neatly because one hex digit represents four bits.", tip: "Computers still store data in binary." },
+      { id: "p1-024", paper: "Paper 1", topic: "Images", type: "Explain", front: "How does colour depth affect an image?", back: "Higher colour depth uses more bits per pixel, allowing more colours but increasing file size.", tip: "Colour depth is not resolution." },
+      { id: "p1-025", paper: "Paper 1", topic: "Images", type: "Explain", front: "How does resolution affect an image?", back: "Higher resolution means more pixels, usually giving more detail but increasing file size.", tip: "Resolution = number of pixels." },
+      { id: "p1-026", paper: "Paper 1", topic: "Sound", type: "Explain", front: "How does sample rate affect sound quality and file size?", back: "A higher sample rate takes more samples per second, improving accuracy but increasing file size.", tip: "Sample rate is samples per second." },
+      { id: "p1-027", paper: "Paper 1", topic: "Sound", type: "Explain", front: "How does bit depth affect sound?", back: "Higher bit depth gives more possible values for each sample, improving accuracy but increasing file size.", tip: "Bit depth is not sample rate." },
+      { id: "p1-028", paper: "Paper 1", topic: "Compression", type: "Compare", front: "What is the difference between lossy and lossless compression?", back: "Lossy permanently removes some data and may reduce quality. Lossless allows the original file to be restored exactly.", tip: "Lossless does not mean no size reduction." },
+      { id: "p1-029", paper: "Paper 1", topic: "Ethics and law", type: "Law", front: "Why is copyright important for software?", back: "It protects creators from unauthorised copying and allows them to earn money from their work.", tip: "Copyright protects creative work." },
+      { id: "p1-030", paper: "Paper 1", topic: "Ethics and law", type: "Ethics", front: "Give one ethical issue linked to collecting personal data.", back: "Privacy, consent, misuse of data, bias, and data being shared without clear permission are ethical concerns.", tip: "Ethical does not always mean illegal." },
+
+      { id: "p2-001", paper: "Paper 2", topic: "Algorithms", type: "Definition", front: "What is an algorithm?", back: "A step-by-step set of instructions used to solve a problem.", tip: "It does not have to be written in a programming language." },
+      { id: "p2-002", paper: "Paper 2", topic: "Algorithms", type: "Testing", front: "Why are algorithms tested?", back: "To check they produce correct outputs, handle different inputs and identify logic errors.", tip: "Testing is not just finding syntax errors." },
+      { id: "p2-003", paper: "Paper 2", topic: "Trace tables", type: "Purpose", front: "Why is a trace table useful?", back: "It shows how variable values change step by step, helping identify logic errors.", tip: "Mention variables changing over time." },
+      { id: "p2-004", paper: "Paper 2", topic: "Searching", type: "Algorithm", front: "How does a linear search work?", back: "It checks each item in order until the target is found or the list ends.", tip: "Linear search works on unsorted lists." },
+      { id: "p2-005", paper: "Paper 2", topic: "Searching", type: "Algorithm", front: "How does a binary search work?", back: "It repeatedly checks the middle item and discards half the list each time. The list must be sorted.", tip: "Sorted list is essential." },
+      { id: "p2-006", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "How does a bubble sort work?", back: "It compares adjacent items and swaps them if they are in the wrong order, repeating passes until sorted.", tip: "Adjacent comparisons are key." },
+      { id: "p2-007", paper: "Paper 2", topic: "Programming basics", type: "Definition", front: "What is a variable?", back: "A named memory location used to store a value that may change while the program runs.", tip: "Variable values can change." },
+      { id: "p2-008", paper: "Paper 2", topic: "Programming basics", type: "Definition", front: "What is a constant?", back: "A named value that should not change while the program runs.", tip: "Useful for values such as VAT rates or max scores." },
+      { id: "p2-009", paper: "Paper 2", topic: "Data types", type: "Definition", front: "Name four common data types.", back: "Integer, real/float, Boolean, character and string are common data types.", tip: "Boolean is True/False." },
+      { id: "p2-010", paper: "Paper 2", topic: "Selection", type: "Concept", front: "What is selection?", back: "Selection allows a program to choose which instructions to run based on a condition.", tip: "Usually if, else or elif." },
+      { id: "p2-011", paper: "Paper 2", topic: "Iteration", type: "Concept", front: "What is iteration?", back: "Iteration is repetition. It allows code to run multiple times, often using for or while loops.", tip: "Iteration = loops." },
+      { id: "p2-012", paper: "Paper 2", topic: "Subprograms", type: "Purpose", front: "Why are subprograms useful?", back: "They break programs into smaller parts, reduce repetition, make code easier to test and improve readability.", tip: "Use terms: modular, reusable, maintainable." },
+      { id: "p2-013", paper: "Paper 2", topic: "Validation", type: "Definition", front: "What is validation?", back: "Validation checks whether input is sensible or acceptable before it is processed.", tip: "Validation does not prove data is true." },
+      { id: "p2-014", paper: "Paper 2", topic: "Validation", type: "Examples", front: "Name three validation checks.", back: "Presence check, range check, length check, format check, type check and lookup check.", tip: "Learn examples and when to use them." },
+      { id: "p2-015", paper: "Paper 2", topic: "Defensive design", type: "Concept", front: "What is defensive design?", back: "Designing programs to reduce errors, handle unexpected input and make the program more robust.", tip: "Validation and authentication are examples." },
+      { id: "p2-016", paper: "Paper 2", topic: "Logic", type: "Boolean", front: "What does AND mean in a condition?", back: "AND means both conditions must be true for the whole condition to be true.", tip: "Both must pass." },
+      { id: "p2-017", paper: "Paper 2", topic: "Logic", type: "Boolean", front: "What does OR mean in a condition?", back: "OR means at least one condition must be true for the whole condition to be true.", tip: "One or both can pass." },
+      { id: "p2-018", paper: "Paper 2", topic: "Logic", type: "Boolean", front: "What does NOT do in Boolean logic?", back: "NOT reverses a Boolean value: True becomes False and False becomes True.", tip: "NOT inverts." },
+      { id: "p2-019", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "x = 5\ny = 3\nprint(x * y)", back: "15", tip: "The expression is evaluated before printing." },
+      { id: "p2-020", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "for i in range(3):\n    print(i)", back: "0\n1\n2", tip: "range(3) gives 0, 1, 2." },
+      { id: "p2-021", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "score = 72\nif score >= 50:\n    print('Pass')\nelse:\n    print('Try again')", back: "Pass", tip: "Only one branch of if/else runs." },
+      { id: "p2-022", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "word = 'computer'\nprint(word[0])\nprint(word[3])", back: "c\np", tip: "String indexing starts at 0." },
+      { id: "p2-023", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "total = 0\nfor i in range(1, 4):\n    total = total + i\nprint(total)", back: "6", tip: "range(1, 4) gives 1, 2, 3." },
+      { id: "p2-024", paper: "Paper 2", topic: "Programming", type: "Logic error", front: "Correct the average calculation.", code: "average = a + b + c / 3", back: "average = (a + b + c) / 3", tip: "Brackets force the addition before division." },
+      { id: "p2-025", paper: "Paper 2", topic: "Programming", type: "Validation", front: "Complete the condition: repeat while age is outside 11 to 16 inclusive.", code: "while __________:\n    age = int(input('Enter age: '))", back: "age < 11 or age > 16", tip: "Use OR because either invalid case should repeat." },
+      { id: "p2-026", paper: "Paper 2", topic: "Programming", type: "Subprogram", front: "What is the output?", code: "def double(number):\n    return number * 2\n\nprint(double(6))", back: "12", tip: "return sends the value back to be printed." },
+      { id: "p2-027", paper: "Paper 2", topic: "Programming", type: "Lists", front: "What is the output?", code: "scores = [3, 5, 8, 2]\nprint(scores[2])\nscores.append(10)\nprint(len(scores))", back: "8\n5", tip: "Index 2 is the third item." },
+      { id: "p2-028", paper: "Paper 2", topic: "Programming", type: "Boolean", front: "What is the output?", code: "x = 7\ny = 12\nprint(x > 5 and y < 10)", back: "False", tip: "AND requires both parts to be true." },
+      { id: "p2-029", paper: "Paper 2", topic: "Programming", type: "While loop", front: "What is the output?", code: "count = 1\nwhile count < 4:\n    print(count)\n    count = count + 1", back: "1\n2\n3", tip: "4 is not printed because the condition becomes false." },
+      { id: "p2-030", paper: "Paper 2", topic: "Programming", type: "File handling", front: "Explain what this code does.", code: "file = open('names.txt', 'a')\nfile.write('Asha\\n')\nfile.close()", back: "It opens names.txt in append mode, writes Asha on a new line, and closes the file.", tip: "Append adds to the end rather than replacing the file." }
+    ];
+
+    let deck = [];
+    let currentIndex = 0;
+    let session = { got: 0, nearly: 0, revise: 0, skipped: 0 };
+
+    const topicGrid = document.getElementById("topicGrid");
+    const coverageNote = document.getElementById("coverageNote");
+    const selectAllButton = document.getElementById("selectAllButton");
+    const clearAllButton = document.getElementById("clearAllButton");
+    const finalRevisionButton = document.getElementById("finalRevisionButton");
+    const modeSelect = document.getElementById("modeSelect");
+    const paperSelect = document.getElementById("paperSelect");
+    const startButton = document.getElementById("startButton");
+    const tagRow = document.getElementById("tagRow");
+    const progressText = document.getElementById("progressText");
+    const promptElement = document.getElementById("prompt");
+    const codeBlock = document.getElementById("codeBlock");
+    const answerBox = document.getElementById("answerBox");
+    const revealButton = document.getElementById("revealButton");
+    const gotItButton = document.getElementById("gotItButton");
+    const nearlyButton = document.getElementById("nearlyButton");
+    const reviseButton = document.getElementById("reviseButton");
+    const skipButton = document.getElementById("skipButton");
+    const summaryPanel = document.getElementById("summaryPanel");
+    const todayDone = document.getElementById("todayDone");
+    const currentStreak = document.getElementById("currentStreak");
+    const weakCount = document.getElementById("weakCount");
+    const sessionScore = document.getElementById("sessionScore");
+    const bankList = document.getElementById("bankList");
+
+    const specLabels = {
+      "CPU": "1.1 Systems architecture: CPU",
+      "CPU performance": "1.1 Systems architecture: CPU performance",
+      "Memory": "1.2 Memory and storage: Primary memory",
+      "Storage": "1.2 Memory and storage: Secondary storage",
+      "Networks": "1.3 Computer networks, connections and protocols",
+      "Network security": "1.4 Network security",
+      "Cyber security": "1.4 Network security: Threats and prevention",
+      "System software": "1.5 Systems software",
+      "Data representation": "1.2 Memory/storage and data representation: Binary and hex",
+      "Images": "1.2 Data representation: Images",
+      "Sound": "1.2 Data representation: Sound",
+      "Compression": "1.2 Data representation: Compression",
+      "Ethics and law": "1.6 Ethical, legal, cultural and environmental impacts",
+      "Algorithms": "2.1 Algorithms",
+      "Trace tables": "2.1 Algorithms: Trace tables",
+      "Searching": "2.1 Algorithms: Searching",
+      "Sorting": "2.1 Algorithms: Sorting",
+      "Programming basics": "2.2 Programming fundamentals",
+      "Data types": "2.2 Programming fundamentals: Data types",
+      "Selection": "2.2 Programming fundamentals: Selection",
+      "Iteration": "2.2 Programming fundamentals: Iteration",
+      "Subprograms": "2.2 Programming fundamentals: Subprograms",
+      "Validation": "2.4 Boolean logic / 2.5 Languages and IDEs: Validation practice",
+      "Defensive design": "2.3 Producing robust programs: Defensive design",
+      "Logic": "2.4 Boolean logic",
+      "Programming": "2.2–2.3 Programming practice"
+    };
+
+    function specLabel(topic) {
+      return specLabels[topic] || topic;
+    }
+
+    function allTopics() {
+      return [...new Set(flashcards.map(card => card.topic))].sort((a, b) => specLabel(a).localeCompare(specLabel(b)));
+    }
+
+    function todayString() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function dayNumber() {
+      return Math.floor(new Date(todayString() + "T00:00:00").getTime() / 86400000);
+    }
+
+    function defaultProgress() {
+      return { daily: {}, streak: 0, lastDate: null, weak: [], selectedTopics: allTopics() };
+    }
+
+    function loadProgress() {
+      const fallback = defaultProgress();
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!saved) return fallback;
+        if (!saved.selectedTopics || !Array.isArray(saved.selectedTopics)) saved.selectedTopics = allTopics();
+        if (!saved.daily) saved.daily = {};
+        if (!saved.weak) saved.weak = [];
+        return saved;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveProgress(progress) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function seededDailyCards(cards, count) {
+      if (cards.length === 0) return [];
+      const start = dayNumber() % cards.length;
+      const result = [];
+      for (let i = 0; i < Math.min(count, cards.length); i++) {
+        result.push(cards[(start + i * 7) % cards.length]);
+      }
+      return result;
+    }
+
+    function selectedTopics() {
+      const progress = loadProgress();
+      return progress.selectedTopics || allTopics();
+    }
+
+    function saveSelectedTopics(topics) {
+      const progress = loadProgress();
+      progress.selectedTopics = topics;
+      saveProgress(progress);
+      updateCoverageNote();
+    }
+
+    function renderTopicChoices() {
+      const selected = new Set(selectedTopics());
+      topicGrid.innerHTML = allTopics().map(topic => {
+        const checked = selected.has(topic) ? "checked" : "";
+        return "<label class='topic-choice'><input type='checkbox' value='" + escapeHtml(topic) + "' " + checked + ">" + escapeHtml(specLabel(topic)) + "</label>";
+      }).join("");
+      updateCoverageNote();
+    }
+
+    function currentTopicSelectionFromUI() {
+      return Array.from(topicGrid.querySelectorAll("input[type='checkbox']:checked")).map(input => input.value);
+    }
+
+    function updateCoverageNote() {
+      const selected = selectedTopics();
+      const selectedCards = flashcards.filter(card => selected.includes(card.topic));
+      coverageNote.textContent = "Selected specification areas: " + selected.length + " / " + allTopics().length + " | Available cards: " + selectedCards.length + " / " + flashcards.length;
+      const topicSummaryText = document.getElementById("topicSummaryText");
+      if (topicSummaryText) {
+        topicSummaryText.textContent = selected.length + " areas selected, " + selectedCards.length + " cards available";
+      }
+    }
+
+    function filteredCards() {
+      const topics = selectedTopics();
+      return flashcards.filter(card => {
+        const paperOk = paperSelect.value === "all" || card.paper === paperSelect.value;
+        const topicOk = topics.includes(card.topic);
+        return paperOk && topicOk;
+      });
+    }
+
+    function buildDeck() {
+      const mode = modeSelect.value;
+      const progress = loadProgress();
+      const weakIds = new Set(progress.weak || []);
+      let cards = filteredCards();
+
+      if (mode === "weak") {
+        cards = cards.filter(card => weakIds.has(card.id));
+      } else if (mode === "daily10") {
+        cards = seededDailyCards(cards, 10);
+      } else if (mode === "sprint") {
+        cards = shuffle(cards).slice(0, 10);
+      } else {
+        cards = shuffle(cards);
+      }
+
+      deck = cards;
+      currentIndex = 0;
+      session = { got: 0, nearly: 0, revise: 0, skipped: 0 };
+      summaryPanel.style.display = "none";
+      renderCard();
+      updateStats();
+    }
+
+    function renderCard() {
+      answerBox.style.display = "none";
+      answerBox.innerHTML = "";
+      codeBlock.innerHTML = "";
+
+      if (deck.length === 0) {
+        tagRow.innerHTML = "";
+        progressText.textContent = "Card 0 / 0";
+        promptElement.textContent = "No cards found. Select at least one topic, or check the Paper and Mode settings.";
+        return;
+      }
+
+      if (currentIndex >= deck.length) {
+        showSummary();
+        return;
+      }
+
+      const card = deck[currentIndex];
+      const progress = loadProgress();
+      const isWeak = (progress.weak || []).includes(card.id);
+
+      tagRow.innerHTML =
+        "<span class='tag " + (card.paper === "Paper 2" ? "paper2" : "") + "'>" + escapeHtml(card.paper) + "</span>" +
+        "<span class='tag'>" + escapeHtml(specLabel(card.topic)) + "</span>" +
+        "<span class='tag'>" + escapeHtml(card.type) + "</span>" +
+        (isWeak ? "<span class='tag weak'>Weak card</span>" : "");
+
+      progressText.textContent = "Card " + (currentIndex + 1) + " / " + deck.length;
+      promptElement.textContent = card.front;
+
+      if (card.code) {
+        codeBlock.innerHTML = "<pre><code>" + escapeHtml(card.code) + "</code></pre>";
+      }
+    }
+
+    function revealAnswer() {
+      if (deck.length === 0 || currentIndex >= deck.length) return;
+      const card = deck[currentIndex];
+      answerBox.innerHTML =
+        "<h3>Answer</h3><p>" + escapeHtml(card.back).replace(/\n/g, "<br>") + "</p>" +
+        "<div class='exam-tip'><strong>Exam tip:</strong> " + escapeHtml(card.tip) + "</div>";
+      answerBox.style.display = "block";
+    }
+
+    function rateCard(rating) {
+      if (deck.length === 0 || currentIndex >= deck.length) return;
+      const card = deck[currentIndex];
+      const progress = loadProgress();
+      progress.weak = progress.weak || [];
+
+      if (rating === "got") {
+        session.got++;
+        progress.weak = progress.weak.filter(id => id !== card.id);
+      } else if (rating === "nearly") {
+        session.nearly++;
+      } else if (rating === "revise") {
+        session.revise++;
+        if (!progress.weak.includes(card.id)) progress.weak.push(card.id);
+      } else if (rating === "skip") {
+        session.skipped++;
+      }
+
+      const today = todayString();
+      progress.daily = progress.daily || {};
+      progress.daily[today] = (progress.daily[today] || 0) + 1;
+
+      if (progress.lastDate !== today) {
+        const previous = progress.lastDate ? new Date(progress.lastDate + "T00:00:00") : null;
+        const current = new Date(today + "T00:00:00");
+        const diff = previous ? Math.round((current - previous) / 86400000) : null;
+        progress.streak = diff === 1 ? (progress.streak || 0) + 1 : 1;
+        progress.lastDate = today;
+      }
+
+      saveProgress(progress);
+      currentIndex++;
+      renderCard();
+      updateStats();
+    }
+
+    function showSummary() {
+      tagRow.innerHTML = "";
+      progressText.textContent = "Sprint complete";
+      promptElement.textContent = "Sprint complete.";
+      codeBlock.innerHTML = "";
+      answerBox.style.display = "none";
+      summaryPanel.innerHTML = "You completed " + deck.length + " cards. Got it: " + session.got + ", Nearly: " + session.nearly + ", Revise again: " + session.revise + ", Skipped: " + session.skipped + ".";
+      summaryPanel.style.display = "block";
+    }
+
+    function updateStats() {
+      const progress = loadProgress();
+      const today = todayString();
+      todayDone.textContent = progress.daily && progress.daily[today] ? progress.daily[today] : 0;
+      currentStreak.textContent = progress.streak || 0;
+      weakCount.textContent = progress.weak ? progress.weak.length : 0;
+      sessionScore.textContent = session.got + "/" + (session.got + session.nearly + session.revise + session.skipped);
+      updateCoverageNote();
+    }
+
+    function renderBankPreview() {
+      bankList.innerHTML = flashcards.map(card =>
+        "<div class='bank-item'><strong>" + escapeHtml(card.paper) + " | " + escapeHtml(specLabel(card.topic)) + " | " + escapeHtml(card.type) + "</strong><br>" + escapeHtml(card.front) + "</div>"
+      ).join("");
+    }
+
+    topicGrid.addEventListener("change", function() {
+      saveSelectedTopics(currentTopicSelectionFromUI());
+      buildDeck();
+    });
+
+    selectAllButton.addEventListener("click", function() {
+      saveSelectedTopics(allTopics());
+      renderTopicChoices();
+      buildDeck();
+    });
+
+    clearAllButton.addEventListener("click", function() {
+      saveSelectedTopics([]);
+      renderTopicChoices();
+      buildDeck();
+    });
+
+    finalRevisionButton.addEventListener("click", function() {
+      paperSelect.value = "all";
+      modeSelect.value = "daily10";
+      saveSelectedTopics(allTopics());
+      renderTopicChoices();
+      buildDeck();
+    });
+
+    startButton.addEventListener("click", buildDeck);
+    revealButton.addEventListener("click", revealAnswer);
+    gotItButton.addEventListener("click", () => rateCard("got"));
+    nearlyButton.addEventListener("click", () => rateCard("nearly"));
+    reviseButton.addEventListener("click", () => rateCard("revise"));
+    skipButton.addEventListener("click", () => rateCard("skip"));
+    paperSelect.addEventListener("change", buildDeck);
+    modeSelect.addEventListener("change", buildDeck);
+
+    renderTopicChoices();
+    renderBankPreview();
+    updateStats();
+    buildDeck();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js").catch(function() {
+          console.log("Service worker registration failed.");
+        });
+      });
+    }
+  </script>
+</body>
+</html>

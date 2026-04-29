@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leicester High School | GCSE Computing Revision Hub</title>
+  <meta name="theme-color" content="#111827" />
+  <meta name="description" content="Leicester High School GCSE Computing revision hub for number systems, daily exam practice and flashcard sprint revision." />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d6dce8;
+      --navy: #111827;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --soft-blue: #eff6ff;
+      --soft-green: #ecfdf5;
+      --soft-purple: #f5f3ff;
+      --green: #047857;
+      --purple: #6d28d9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #e8eef8 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--navy);
+      color: white;
+      padding: 2rem 1rem 2.6rem;
+      text-align: center;
+    }
+
+    .school-name {
+      margin: 0 0 0.45rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d1d5db;
+      font-weight: 800;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.75rem, 4vw, 2.7rem);
+    }
+
+    header p {
+      margin: 0.5rem auto 0;
+      max-width: 720px;
+      color: #d1d5db;
+      font-size: 1.05rem;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: -1.45rem auto 0;
+      padding: 1.25rem;
+    }
+
+    .welcome-card, .app-card, .routine-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+    }
+
+    .welcome-card {
+      padding: 1.2rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .welcome-card h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.25rem;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .install-note {
+      background: var(--soft-blue);
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      border-radius: 999px;
+      padding: 0.55rem 0.8rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .app-card {
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 330px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      background: var(--primary);
+    }
+
+    .app-card.green::before { background: var(--green); }
+    .app-card.purple::before { background: var(--purple); }
+
+    .icon {
+      width: 3.2rem;
+      height: 3.2rem;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 1.7rem;
+      font-weight: 900;
+      margin-bottom: 0.85rem;
+      background: var(--soft-blue);
+      color: #1e3a8a;
+    }
+
+    .green .icon {
+      background: var(--soft-green);
+      color: var(--green);
+    }
+
+    .purple .icon {
+      background: var(--soft-purple);
+      color: var(--purple);
+    }
+
+    .app-card h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.3rem;
+    }
+
+    .app-card p {
+      margin: 0.25rem 0;
+      color: var(--muted);
+    }
+
+    .app-card ul {
+      margin: 0.75rem 0 1rem 1.1rem;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    .app-card li {
+      margin: 0.18rem 0;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin-top: auto;
+      text-decoration: none;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1rem;
+      border-radius: 14px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .button-link:hover { background: var(--primary-dark); }
+    .green .button-link { background: var(--green); }
+    .green .button-link:hover { background: #065f46; }
+    .purple .button-link { background: var(--purple); }
+    .purple .button-link:hover { background: #5b21b6; }
+
+    .routine-card {
+      padding: 1.15rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .routine-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    .routine-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+    }
+
+    .routine-step {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0.85rem;
+    }
+
+    .routine-step strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .routine-step span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 0.5rem 0 1.5rem;
+    }
+
+    @media (max-width: 920px) {
+      .app-grid { grid-template-columns: 1fr; }
+      .app-card { min-height: auto; }
+      .routine-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      main { padding: 0.85rem; }
+      .routine-grid { grid-template-columns: 1fr; }
+      .install-note { white-space: normal; border-radius: 16px; }
+      .button-link { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="school-name">Leicester High School</p>
+    <h1>GCSE Computing Revision Hub</h1>
+    <p>Daily practice, exam fluency and fast recall revision in one place.</p>
+  </header>
+
+  <main>
+    <section class="welcome-card" aria-label="Welcome">
+      <div>
+        <h2>Choose your revision task</h2>
+        <p>Short, regular practice is the aim. Little and often will build confidence.</p>
+      </div>
+      <div class="install-note">Add this hub to your home screen</div>
+    </section>
+
+    <section class="app-grid" aria-label="Revision apps">
+      <article class="app-card">
+        <div class="icon">01</div>
+        <h2>Number Systems</h2>
+        <p>Practise binary, denary and hexadecimal conversions.</p>
+        <ul>
+          <li>Binary → denary</li>
+          <li>Denary → binary</li>
+          <li>Hex conversions</li>
+          <li>Binary addition</li>
+        </ul>
+        <a class="button-link" href="number-systems/index.html">Start Number Systems</a>
+      </article>
+
+      <article class="app-card green">
+        <div class="icon">02</div>
+        <h2>Daily Exam Practice</h2>
+        <p>One theory question and one programming question each day.</p>
+        <ul>
+          <li>OCR-style questions</li>
+          <li>Mark schemes</li>
+          <li>Model answers</li>
+          <li>Common mistakes</li>
+        </ul>
+        <a class="button-link" href="daily-practice/index.html">Start Daily Practice</a>
+      </article>
+
+      <article class="app-card purple">
+        <div class="icon">03</div>
+        <h2>Flashcard Sprint</h2>
+        <p>Fast recall practice for the final weeks before the exam.</p>
+        <ul>
+          <li>Daily 10 mode</li>
+          <li>Paper and topic filters</li>
+          <li>Weak-card pile</li>
+          <li>Exam tips</li>
+        </ul>
+        <a class="button-link" href="flashcards/index.html">Start Flashcards</a>
+      </article>
+    </section>
+
+    <section class="routine-card" aria-label="Suggested revision routine">
+      <h2>Suggested routine</h2>
+      <p>Use the hub for focused, manageable revision. Aim for consistency rather than long sessions.</p>
+      <div class="routine-grid">
+        <div class="routine-step"><strong>3 minutes</strong><span>Number systems warm-up</span></div>
+        <div class="routine-step"><strong>5 minutes</strong><span>Daily exam question pair</span></div>
+        <div class="routine-step"><strong>5 minutes</strong><span>Flashcard sprint</span></div>
+        <div class="routine-step"><strong>1 minute</strong><span>Review weak cards</span></div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Leicester High School | GCSE Computing Revision</p>
+    </footer>
+  </main>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js").catch(function() {
+          console.log("Service worker registration failed.");
+        });
+      });
+    }
+  </script>
+</body>
+</html>

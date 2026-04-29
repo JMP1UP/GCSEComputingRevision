@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Binary, Hex and Denary Daily Practice</title>
+  <meta name="theme-color" content="#111827" />
+  <meta name="description" content="Daily GCSE practice for binary, hexadecimal and denary conversions." />
+  <link rel="manifest" href="Number%20Systems/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d6dce8;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #047857;
+      --error: #b91c1c;
+      --warning: #92400e;
+      --soft-blue: #eff6ff;
+      --soft-success: #ecfdf5;
+      --soft-error: #fef2f2;
+      --soft-warning: #fffbeb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #e8eef8 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 1.8rem 1rem 2.2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+    }
+
+    header p {
+      margin: 0;
+      color: #d1d5db;
+      font-size: 1.05rem;
+    }
+
+    main {
+      max-width: 1150px;
+      margin: -1.2rem auto 0;
+      padding: 1.25rem;
+    }
+
+    .top-panel {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .intro-card, .progress-card, .controls, .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .intro-card, .progress-card, .controls { border-radius: 20px; padding: 1.1rem; }
+
+    .intro-card h2, .progress-card h2 {
+      margin: 0 0 0.4rem;
+      font-size: 1.2rem;
+    }
+
+    .intro-card p, .progress-card p {
+      margin: 0.25rem 0;
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.8rem;
+    }
+
+    .stat {
+      background: var(--soft-blue);
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.45rem;
+      color: #1e3a8a;
+    }
+
+    .stat span {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .score-box {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 0.7rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+    }
+
+    button:hover { background: var(--primary-dark); }
+
+    button.secondary { background: #e5e7eb; color: #111827; }
+    button.secondary:hover { background: #d1d5db; }
+
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      border-radius: 20px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+    }
+
+    .card-top {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      margin-bottom: 0.7rem;
+    }
+
+    .number-badge {
+      flex: 0 0 auto;
+      width: 2.1rem;
+      height: 2.1rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-weight: 800;
+    }
+
+    .card h2 { margin: 0; font-size: 1.1rem; }
+
+    .type-note {
+      margin: 0.1rem 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .question {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin: 0.65rem 0;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.8rem;
+      overflow-x: auto;
+    }
+
+    .byte-row {
+      display: inline-flex;
+      gap: 0.18rem;
+      flex-wrap: nowrap;
+      vertical-align: middle;
+      margin: 0.25rem 0;
+    }
+
+    .bit-box {
+      display: inline-grid;
+      place-items: center;
+      width: 1.55rem;
+      height: 1.85rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      background: #ffffff;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .binary-display {
+      display: block;
+      margin-top: 0.45rem;
+    }
+
+    .place-value-row {
+      display: grid;
+      grid-template-columns: repeat(8, 1.55rem);
+      gap: 0.18rem;
+      margin-top: 0.2rem;
+      align-items: center;
+    }
+
+    .place-value-row span {
+      text-align: center;
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .addition-display {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.3rem 0.45rem;
+      align-items: center;
+      margin-top: 0.45rem;
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .addition-symbol {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.95rem;
+      min-height: 2.6rem;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    label {
+      display: block;
+      margin-top: auto;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
+      text-transform: uppercase;
+      background: white;
+    }
+
+    input:focus {
+      outline: 3px solid #bfdbfe;
+      border-color: var(--primary);
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.8rem;
+    }
+
+    .feedback {
+      margin-top: 0.8rem;
+      padding: 0.75rem;
+      border-radius: 12px;
+      min-height: 2.8rem;
+      border: 1px solid transparent;
+      font-weight: 700;
+    }
+
+    .feedback.correct {
+      background: var(--soft-success);
+      border-color: #a7f3d0;
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      background: var(--soft-error);
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    .feedback.neutral {
+      background: #f9fafb;
+      border-color: var(--border);
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .working {
+      margin-top: 0.75rem;
+      background: #f9fafb;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+      font-family: Consolas, Monaco, monospace;
+      white-space: pre-wrap;
+      display: none;
+      overflow-x: auto;
+    }
+
+    .overflow {
+      background: var(--soft-warning);
+      border-color: #fde68a;
+      color: var(--warning);
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .completion-message {
+      display: none;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 16px;
+      background: var(--soft-success);
+      border: 1px solid #a7f3d0;
+      color: var(--success);
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 780px) {
+      .top-panel { grid-template-columns: 1fr; }
+      main { padding: 0.85rem; }
+      .practice-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Binary, Hex and Denary Daily Practice</h1>
+    <p>Five short questions. Build accuracy through regular practice.</p>
+  </header>
+
+  <main>
+    <section class="top-panel" aria-label="Daily practice summary">
+      <div class="intro-card">
+        <h2>Complete today’s five questions</h2>
+        <p>Each practice set includes one question from each key GCSE conversion skill, plus one binary addition question.</p>
+        <p>Use <strong>Show working</strong> after trying a question, not before, to get the most benefit.</p>
+      </div>
+
+      <div class="progress-card">
+        <h2>Your practice streak</h2>
+        <p id="streakMessage">Complete all five questions correctly to build your streak.</p>
+        <div class="stats">
+          <div class="stat"><strong id="currentStreak">0</strong><span>Current streak</span></div>
+          <div class="stat"><strong id="bestStreak">0</strong><span>Best streak</span></div>
+          <div class="stat"><strong id="daysCompleted">0</strong><span>Days completed</span></div>
+          <div class="stat"><strong id="todayStatus">Not yet</strong><span>Today done?</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Practice controls">
+      <div>
+        <strong>Today’s practice</strong>
+        <div class="small-note">Answers are saved only on this device and browser.</div>
+      </div>
+      <div class="score-box">
+        <span id="score" class="pill">Score: 0 / 5</span>
+      </div>
+      <div class="actions">
+        <button id="newPracticeButton">New questions</button>
+        <button id="resetButton" class="secondary">Reset answers</button>
+      </div>
+    </section>
+
+    <div id="completionMessage" class="completion-message">Excellent work. You have completed today’s practice.</div>
+
+    <section id="practiceGrid" class="practice-grid" aria-live="polite"></section>
+
+    <footer>
+      <p>Tip: binary answers should usually be written as 8 bits, for example <strong>00001101</strong>.</p>
+    </footer>
+  </main>
+
+  <script>
+    const questionTypes = [
+      "binary-to-denary",
+      "denary-to-binary",
+      "hex-to-denary",
+      "hex-to-binary",
+      "binary-addition"
+    ];
+
+    const STORAGE_KEY = "numberPracticeProgressV1";
+
+    let questions = [];
+    let score = 0;
+
+    const practiceGrid = document.getElementById("practiceGrid");
+    const scoreElement = document.getElementById("score");
+    const newPracticeButton = document.getElementById("newPracticeButton");
+    const resetButton = document.getElementById("resetButton");
+    const completionMessage = document.getElementById("completionMessage");
+    const currentStreakElement = document.getElementById("currentStreak");
+    const bestStreakElement = document.getElementById("bestStreak");
+    const daysCompletedElement = document.getElementById("daysCompleted");
+    const todayStatusElement = document.getElementById("todayStatus");
+    const streakMessageElement = document.getElementById("streakMessage");
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function toEightBitBinary(value) {
+      return value.toString(2).padStart(8, "0");
+    }
+
+    function toHex(value) {
+      return value.toString(16).toUpperCase().padStart(2, "0");
+    }
+
+    function normaliseAnswer(answer) {
+      return answer.trim().replace(/\s+/g, "").toUpperCase();
+    }
+
+    function renderByte(binary) {
+      return "<span class='byte-row' aria-label='" + binary + "'>" +
+        binary.split("").map(function(bit) {
+          return "<span class='bit-box'>" + bit + "</span>";
+        }).join("") +
+        "</span>";
+    }
+
+    function renderPlaceValues() {
+      const places = [128, 64, 32, 16, 8, 4, 2, 1];
+      return "<span class='place-value-row' aria-label='Place values'>" +
+        places.map(function(place) {
+          return "<span>" + place + "</span>";
+        }).join("") +
+        "</span>";
+    }
+
+    function renderBinaryWithPlaces(binary) {
+      return "<span class='binary-display'>" + renderByte(binary) + renderPlaceValues() + "</span>";
+    }
+
+    function renderAddition(aBinary, bBinary) {
+      return "<span class='addition-display'>" +
+        "<span></span><span>" + renderByte(aBinary) + "</span>" +
+        "<span class='addition-symbol'>+</span><span>" + renderByte(bBinary) + "</span>" +
+        "</span>";
+    }
+
+    function todayString() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function dateDifferenceInDays(dateA, dateB) {
+      const oneDay = 24 * 60 * 60 * 1000;
+      const a = new Date(dateA + "T00:00:00");
+      const b = new Date(dateB + "T00:00:00");
+      return Math.round((b - a) / oneDay);
+    }
+
+    function loadProgress() {
+      const fallback = {
+        currentStreak: 0,
+        bestStreak: 0,
+        daysCompleted: 0,
+        lastCompletedDate: null
+      };
+
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveProgress(progress) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }
+
+    function updateProgressDisplay() {
+      const progress = loadProgress();
+      const today = todayString();
+      const completedToday = progress.lastCompletedDate === today;
+
+      currentStreakElement.textContent = progress.currentStreak;
+      bestStreakElement.textContent = progress.bestStreak;
+      daysCompletedElement.textContent = progress.daysCompleted;
+      todayStatusElement.textContent = completedToday ? "Yes" : "Not yet";
+
+      streakMessageElement.textContent = completedToday
+        ? "You have completed today’s practice. Come back tomorrow to continue your streak."
+        : "Complete all five questions correctly to build your streak.";
+    }
+
+    function markTodayComplete() {
+      const progress = loadProgress();
+      const today = todayString();
+
+      if (progress.lastCompletedDate === today) {
+        updateProgressDisplay();
+        return;
+      }
+
+      if (progress.lastCompletedDate && dateDifferenceInDays(progress.lastCompletedDate, today) === 1) {
+        progress.currentStreak += 1;
+      } else {
+        progress.currentStreak = 1;
+      }
+
+      progress.bestStreak = Math.max(progress.bestStreak, progress.currentStreak);
+      progress.daysCompleted += 1;
+      progress.lastCompletedDate = today;
+
+      saveProgress(progress);
+      updateProgressDisplay();
+    }
+
+    function makeQuestion(type) {
+      let value;
+      let a;
+      let b;
+      let total;
+      let overflow;
+
+      switch (type) {
+        case "binary-to-denary":
+          value = randomInt(1, 255);
+          return {
+            type: type,
+            title: "Binary → Denary",
+            note: "Read the 1s using place value.",
+            prompt: "Convert " + renderBinaryWithPlaces(toEightBitBinary(value)) + " to denary.",
+            answer: String(value),
+            accepted: [String(value)],
+            hint: "Use place values: 128, 64, 32, 16, 8, 4, 2, 1.",
+            working: binaryToDenaryWorking(toEightBitBinary(value))
+          };
+
+        case "denary-to-binary":
+          value = randomInt(1, 255);
+          return {
+            type: type,
+            title: "Denary → Binary",
+            note: "Build the number using 8 bits.",
+            prompt: "Convert " + value + " to 8-bit binary.",
+            answer: toEightBitBinary(value),
+            accepted: [toEightBitBinary(value), value.toString(2)],
+            hint: "Start with 128 and work down to 1.",
+            working: denaryToBinaryWorking(value)
+          };
+
+        case "hex-to-denary":
+          value = randomInt(1, 255);
+          return {
+            type: type,
+            title: "Hex → Denary",
+            note: "Use base 16.",
+            prompt: "Convert " + toHex(value) + " to denary.",
+            answer: String(value),
+            accepted: [String(value)],
+            hint: "For two hex digits: first digit × 16, second digit × 1.",
+            working: hexToDenaryWorking(toHex(value))
+          };
+
+        case "hex-to-binary":
+          value = randomInt(1, 255);
+          return {
+            type: type,
+            title: "Hex → Binary",
+            note: "Each hex digit becomes 4 bits.",
+            prompt: "Convert " + toHex(value) + " to 8-bit binary.",
+            answer: toEightBitBinary(value),
+            accepted: [toEightBitBinary(value), value.toString(2)],
+            hint: "Convert each hex digit into 4 binary bits.",
+            working: hexToBinaryWorking(toHex(value))
+          };
+
+        case "binary-addition":
+          a = randomInt(1, 255);
+          b = randomInt(1, 255);
+          total = a + b;
+          overflow = total > 255;
+          return {
+            type: type,
+            title: "Binary Addition",
+            note: "Add and check for overflow.",
+            prompt: "Add " + renderAddition(toEightBitBinary(a), toEightBitBinary(b)),
+            answer: toEightBitBinary(total & 255),
+            accepted: [toEightBitBinary(total & 255), (total & 255).toString(2)],
+            hint: "Add from right to left. If the total is over 255, there is overflow.",
+            working: binaryAdditionWorking(a, b),
+            overflow: overflow
+          };
+      }
+    }
+
+    function binaryToDenaryWorking(binary) {
+      const places = [128, 64, 32, 16, 8, 4, 2, 1];
+      const parts = binary.split("").map(function(bit, index) {
+        return bit === "1" ? places[index] : 0;
+      });
+      const total = parts.reduce(function(sum, part) { return sum + part; }, 0);
+      return binary + "\n" + places.join("  ") + "\n\nAdd the place values with a 1:\n" + (parts.filter(Boolean).join(" + ") || "0") + " = " + total;
+    }
+
+    function denaryToBinaryWorking(value) {
+      const places = [128, 64, 32, 16, 8, 4, 2, 1];
+      let remaining = value;
+      const bits = places.map(function(place) {
+        if (remaining >= place) {
+          remaining -= place;
+          return "1";
+        }
+        return "0";
+      });
+      return "Target: " + value + "\nPlaces: " + places.join("  ") + "\nBits:   " + bits.join("    ") + "\n\nAnswer: " + bits.join("");
+    }
+
+    function hexToDenaryWorking(hex) {
+      const first = parseInt(hex[0], 16);
+      const second = parseInt(hex[1], 16);
+      const total = first * 16 + second;
+      return hex + "\n(" + hex[0] + " × 16) + (" + hex[1] + " × 1)\n(" + first + " × 16) + (" + second + " × 1) = " + total;
+    }
+
+    function hexToBinaryWorking(hex) {
+      const first = parseInt(hex[0], 16).toString(2).padStart(4, "0");
+      const second = parseInt(hex[1], 16).toString(2).padStart(4, "0");
+      return hex[0] + " = " + first + "\n" + hex[1] + " = " + second + "\n\nAnswer: " + first + second;
+    }
+
+    function binaryAdditionWorking(a, b) {
+      const total = a + b;
+      const overflowText = total > 255
+        ? "Overflow: yes, because " + total + " is greater than 255.\nStored 8-bit result: " + toEightBitBinary(total & 255)
+        : "Overflow: no.";
+
+      return "  " + toEightBitBinary(a) + " (" + a + ")\n+ " + toEightBitBinary(b) + " (" + b + ")\n= " + total.toString(2) + " (" + total + ")\n\n" + overflowText;
+    }
+
+    function generatePractice() {
+      questions = questionTypes.map(makeQuestion);
+      score = 0;
+      completionMessage.style.display = "none";
+      updateScore();
+      renderQuestions();
+      updateProgressDisplay();
+    }
+
+    function updateScore() {
+      scoreElement.textContent = "Score: " + score + " / " + (questions.length || 5);
+    }
+
+    function renderQuestions() {
+      practiceGrid.innerHTML = "";
+
+      questions.forEach(function(question, index) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        card.innerHTML = "\n" +
+          "<div class='card-top'>" +
+            "<div class='number-badge'>" + (index + 1) + "</div>" +
+            "<div><h2>" + question.title + "</h2><p class='type-note'>" + question.note + "</p></div>" +
+          "</div>" +
+          "<p class='question'>" + question.prompt + "</p>" +
+          "<p class='hint'>" + question.hint + "</p>" +
+          "<label for='answer-" + index + "'>Your answer</label>" +
+          "<input id='answer-" + index + "' type='text' autocomplete='off' inputmode='text' />" +
+          "<div class='actions'>" +
+            "<button data-check='" + index + "'>Check</button>" +
+            "<button data-working='" + index + "' class='secondary'>Show working</button>" +
+          "</div>" +
+          "<div id='feedback-" + index + "' class='feedback neutral'>Enter your answer, then press Check.</div>" +
+          "<div id='working-" + index + "' class='working " + (question.overflow ? "overflow" : "") + "'>" + question.working + "</div>";
+
+        practiceGrid.appendChild(card);
+      });
+    }
+
+    function checkAnswer(index) {
+      const input = document.getElementById("answer-" + index);
+      const feedback = document.getElementById("feedback-" + index);
+      const question = questions[index];
+      const userAnswer = normaliseAnswer(input.value);
+
+      if (!userAnswer) {
+        feedback.className = "feedback incorrect";
+        feedback.textContent = "Please enter an answer first.";
+        return;
+      }
+
+      if (question.accepted.includes(userAnswer)) {
+        if (!input.dataset.correct) {
+          score++;
+          input.dataset.correct = "true";
+        }
+        feedback.className = "feedback correct";
+        feedback.textContent = question.type === "binary-addition" && question.overflow
+          ? "Correct. The 8-bit result is " + question.answer + ". Overflow has occurred."
+          : "Correct. The answer is " + question.answer + ".";
+      } else {
+        feedback.className = "feedback incorrect";
+        feedback.textContent = "Not quite. Check the place values and try again.";
+      }
+
+      updateScore();
+      checkForCompletion();
+    }
+
+    function checkForCompletion() {
+      if (score === questions.length) {
+        completionMessage.style.display = "block";
+        markTodayComplete();
+      }
+    }
+
+    function toggleWorking(index) {
+      const working = document.getElementById("working-" + index);
+      working.style.display = working.style.display === "block" ? "none" : "block";
+    }
+
+    practiceGrid.addEventListener("click", function(event) {
+      const checkIndex = event.target.getAttribute("data-check");
+      const workingIndex = event.target.getAttribute("data-working");
+
+      if (checkIndex !== null) {
+        checkAnswer(Number(checkIndex));
+      }
+
+      if (workingIndex !== null) {
+        toggleWorking(Number(workingIndex));
+      }
+    });
+
+    practiceGrid.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" && event.target.tagName === "INPUT") {
+        const index = Number(event.target.id.split("-")[1]);
+        checkAnswer(index);
+      }
+    });
+
+    newPracticeButton.addEventListener("click", generatePractice);
+
+    resetButton.addEventListener("click", function() {
+      score = 0;
+      completionMessage.style.display = "none";
+      document.querySelectorAll("input").forEach(function(input) {
+        input.value = "";
+        delete input.dataset.correct;
+      });
+      document.querySelectorAll(".feedback").forEach(function(feedback) {
+        feedback.className = "feedback neutral";
+        feedback.textContent = "Enter your answer, then press Check.";
+      });
+      updateScore();
+    });
+
+    generatePractice();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js").catch(function() {
+          console.log("Service worker registration failed.");
+        });
+      });
+    }
+  </script>
+</body>
+</html>
