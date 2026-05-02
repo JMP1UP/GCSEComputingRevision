@@ -437,6 +437,8 @@
     ];
 
     const STORAGE_KEY = "numberPracticeProgressV1";
+    const LAST_AREA_KEY = "gcseComputingLastAreaV1";
+    localStorage.setItem(LAST_AREA_KEY, "number");
 
     let questions = [];
     let score = 0;
@@ -516,7 +518,7 @@
       };
 
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || fallback;
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || fallback; if(!saved.daily) saved.daily = {}; return saved;
       } catch {
         return fallback;
       }
@@ -560,7 +562,7 @@
       progress.daysCompleted += 1;
       progress.lastCompletedDate = today;
 
-      saveProgress(progress);
+      progress.daily = progress.daily || {}; progress.daily[today] = (progress.daily[today] || 0) + 1; saveProgress(progress);
       updateProgressDisplay();
     }
 

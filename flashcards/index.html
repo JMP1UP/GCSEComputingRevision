@@ -502,6 +502,8 @@
 
   <script>
     const STORAGE_KEY = "gcseComputingFlashcardsWithTopicsV1";
+    const LAST_AREA_KEY = "gcseComputingLastAreaV1";
+    localStorage.setItem(LAST_AREA_KEY, "flashcards");
 
     const flashcards = [
       { id: "p1-001", paper: "Paper 1", topic: "CPU", type: "Definition", front: "What is the purpose of the CPU?", back: "The CPU executes instructions, performs calculations and controls the flow of data around the computer system.", tip: "Use the words execute, process and control." },
@@ -732,6 +734,7 @@
         }
         if (!saved.daily) saved.daily = {};
         if (!saved.weak) saved.weak = [];
+        if (!saved.topicStats) saved.topicStats = {};
         return saved;
       } catch {
         return fallback;
@@ -887,14 +890,19 @@
       const card = deck[currentIndex];
       const progress = loadProgress();
       progress.weak = progress.weak || [];
+      progress.topicStats = progress.topicStats || {};
+      progress.topicStats[card.topic] = progress.topicStats[card.topic] || { got: 0, nearly: 0, revise: 0 };
 
       if (rating === "got") {
         session.got++;
+        progress.topicStats[card.topic].got++;
         progress.weak = progress.weak.filter(id => id !== card.id);
       } else if (rating === "nearly") {
         session.nearly++;
+        progress.topicStats[card.topic].nearly++;
       } else if (rating === "revise") {
         session.revise++;
+        progress.topicStats[card.topic].revise++;
         if (!progress.weak.includes(card.id)) progress.weak.push(card.id);
       } else if (rating === "skip") {
         session.skipped++;

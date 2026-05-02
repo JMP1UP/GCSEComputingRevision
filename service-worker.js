@@ -1,4 +1,4 @@
-const CACHE_NAME = "lhs-gcse-computing-revision-v4";
+const CACHE_NAME = "lhs-gcse-computing-revision-v5";
 const ASSETS = [
   "./",
   "./index.html",

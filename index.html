@@ -227,6 +227,138 @@
       font-size: 0.95rem;
     }
 
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .coach-card, .goal-card, .checklist-card, .weak-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+      padding: 1.15rem;
+    }
+
+    .coach-card h2, .goal-card h2, .checklist-card h2, .weak-card h2 {
+      margin: 0 0 0.4rem;
+      font-size: 1.25rem;
+    }
+
+    .coach-card p, .goal-card p, .checklist-card p, .weak-card p {
+      margin: 0.25rem 0;
+      color: var(--muted);
+    }
+
+    .continue-row {
+      display: flex;
+      gap: 0.65rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 0.9rem;
+    }
+
+    .continue-button {
+      border: 0;
+      border-radius: 14px;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--navy);
+      color: white;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .mini-pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 0.7rem;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .goal-bar {
+      height: 14px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.75rem 0 0.35rem;
+    }
+
+    .goal-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      border-radius: 999px;
+      transition: width .25s ease;
+    }
+
+    .weak-list {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .weak-topic {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.65rem 0.75rem;
+      font-weight: 800;
+    }
+
+    .weak-topic span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .checklist-card {
+      margin-bottom: 1.25rem;
+    }
+
+    .checklist-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.65rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .check-item input { margin-top: 0.15rem; transform: scale(1.1); }
+    .check-item small { display: block; color: var(--muted); font-weight: 600; margin-top: 0.1rem; }
+
     footer {
       text-align: center;
       color: var(--muted);
@@ -238,6 +370,8 @@
       .app-grid { grid-template-columns: 1fr; }
       .app-card { min-height: auto; }
       .routine-grid { grid-template-columns: 1fr 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .checklist-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 560px) {
@@ -264,6 +398,55 @@
       <div class="install-note">Add this hub to your home screen</div>
     </section>
 
+
+    <section class="dashboard-grid" aria-label="Personal revision dashboard">
+      <article class="coach-card">
+        <h2>Your revision dashboard</h2>
+        <p id="coachMessage">Loading your progress…</p>
+        <div class="continue-row">
+          <a id="continueButton" class="continue-button" href="daily-practice/index.html">Continue where you left off</a>
+          <span id="lastAreaPill" class="mini-pill">Last area: Daily Practice</span>
+          <span id="streakPill" class="mini-pill">Streak: 0</span>
+        </div>
+      </article>
+      <article class="goal-card">
+        <h2>Weekly goal</h2>
+        <p>Complete 5 useful revision actions this week.</p>
+        <div class="goal-bar"><div id="weeklyGoalFill" class="goal-fill"></div></div>
+        <p><strong id="weeklyGoalText">0 / 5 completed</strong></p>
+      </article>
+    </section>
+
+    <section class="dashboard-grid" aria-label="Weak topic summary">
+      <article class="weak-card">
+        <h2>Weak topic dashboard</h2>
+        <p>Based on cards you have marked for revision on this device.</p>
+        <div id="weakTopicList" class="weak-list"></div>
+      </article>
+      <article class="weak-card">
+        <h2>Quick choice</h2>
+        <p>Not sure what to do? Start with the weakest topic, then complete Daily Practice.</p>
+        <div class="continue-row">
+          <a class="button-link" data-area="flashcards" href="flashcards/index.html?mode=weak">Practise weak cards</a>
+          <a class="button-link" data-area="daily" href="daily-practice/index.html">Daily Practice</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="checklist-card" aria-label="OCR J277 specification checklist">
+      <div class="checklist-head">
+        <div>
+          <h2>OCR J277 specification checklist</h2>
+          <p>Tick topics as they become secure. This is saved only on this device/browser.</p>
+        </div>
+        <span id="specProgressPill" class="mini-pill">0 / 11 secure</span>
+      </div>
+      <details>
+        <summary><strong>Show or hide checklist</strong></summary>
+        <div id="specChecklist" class="checklist-grid"></div>
+      </details>
+    </section>
+
     <section class="app-grid" aria-label="Revision apps">
       <article class="app-card">
         <div class="icon">01</div>
@@ -275,7 +458,7 @@
           <li>Hex conversions</li>
           <li>Binary addition</li>
         </ul>
-        <a class="button-link" href="number-systems/index.html">Start Number Systems</a>
+        <a class="button-link" data-area="number" href="number-systems/index.html">Start Number Systems</a>
       </article>
 
       <article class="app-card green">
@@ -288,7 +471,7 @@
           <li>Model answers</li>
           <li>Common mistakes</li>
         </ul>
-        <a class="button-link" href="daily-practice/index.html">Start Daily Practice</a>
+        <a class="button-link" data-area="daily" href="daily-practice/index.html">Start Daily Practice</a>
       </article>
 
       <article class="app-card purple">
@@ -301,7 +484,7 @@
           <li>Weak-card pile</li>
           <li>Exam tips</li>
         </ul>
-        <a class="button-link" href="flashcards/index.html">Start Flashcards</a>
+        <a class="button-link" data-area="flashcards" href="flashcards/index.html">Start Flashcards</a>
       </article>
     </section>
 
@@ -322,6 +505,112 @@
   </main>
 
   <script>
+
+    const DAILY_KEY = "gcseComputingDailyPracticeV2";
+    const FLASH_KEY = "gcseComputingFlashcardsWithTopicsV1";
+    const NUMBER_KEY = "numberPracticeProgressV1";
+    const LAST_AREA_KEY = "gcseComputingLastAreaV1";
+    const CHECKLIST_KEY = "gcseComputingSpecChecklistV1";
+    const weakMap = [{"id": "p1-001", "topic": "CPU"}, {"id": "p1-002", "topic": "CPU"}, {"id": "p1-003", "topic": "CPU"}, {"id": "p1-004", "topic": "CPU"}, {"id": "p1-005", "topic": "CPU"}, {"id": "p1-006", "topic": "CPU performance"}, {"id": "p1-007", "topic": "CPU performance"}, {"id": "p1-008", "topic": "Memory"}, {"id": "p1-009", "topic": "Memory"}, {"id": "p1-010", "topic": "Storage"}, {"id": "p1-011", "topic": "Storage"}, {"id": "p1-012", "topic": "Networks"}, {"id": "p1-013", "topic": "Networks"}, {"id": "p1-014", "topic": "Networks"}, {"id": "p1-015", "topic": "Networks"}, {"id": "p1-016", "topic": "Networks"}, {"id": "p1-017", "topic": "Network security"}, {"id": "p1-018", "topic": "Network security"}, {"id": "p1-019", "topic": "Cyber security"}, {"id": "p1-020", "topic": "Cyber security"}, {"id": "p1-021", "topic": "System software"}, {"id": "p1-022", "topic": "Data representation"}, {"id": "p1-023", "topic": "Data representation"}, {"id": "p1-024", "topic": "Images"}, {"id": "p1-025", "topic": "Images"}, {"id": "p1-026", "topic": "Sound"}, {"id": "p1-027", "topic": "Sound"}, {"id": "p1-028", "topic": "Compression"}, {"id": "p1-029", "topic": "Ethics and law"}, {"id": "p1-030", "topic": "Ethics and law"}, {"id": "p2-001", "topic": "Algorithms"}, {"id": "p2-002", "topic": "Algorithms"}, {"id": "p2-003", "topic": "Trace tables"}, {"id": "p2-004", "topic": "Searching"}, {"id": "p2-005", "topic": "Searching"}, {"id": "p2-006", "topic": "Sorting"}, {"id": "p2-007", "topic": "Programming basics"}, {"id": "p2-008", "topic": "Programming basics"}, {"id": "p2-009", "topic": "Data types"}, {"id": "p2-010", "topic": "Selection"}, {"id": "p2-011", "topic": "Iteration"}, {"id": "p2-012", "topic": "Subprograms"}, {"id": "p2-013", "topic": "Validation"}, {"id": "p2-014", "topic": "Validation"}, {"id": "p2-015", "topic": "Defensive design"}, {"id": "p2-016", "topic": "Logic"}, {"id": "p2-017", "topic": "Logic"}, {"id": "p2-018", "topic": "Logic"}, {"id": "p2-019", "topic": "Programming"}, {"id": "p2-020", "topic": "Programming"}, {"id": "p2-021", "topic": "Programming"}, {"id": "p2-022", "topic": "Programming"}, {"id": "p2-023", "topic": "Programming"}, {"id": "p2-024", "topic": "Programming"}, {"id": "p2-025", "topic": "Programming"}, {"id": "p2-026", "topic": "Programming"}, {"id": "p2-027", "topic": "Programming"}, {"id": "p2-028", "topic": "Programming"}, {"id": "p2-029", "topic": "Programming"}, {"id": "p2-030", "topic": "Programming"}, {"id": "p1-031", "topic": "CPU"}, {"id": "p1-032", "topic": "CPU"}, {"id": "p1-033", "topic": "CPU"}, {"id": "p1-034", "topic": "Embedded systems"}, {"id": "p1-035", "topic": "Data units"}, {"id": "p1-036", "topic": "Data units"}, {"id": "p1-037", "topic": "Data units"}, {"id": "p1-038", "topic": "Characters"}, {"id": "p1-039", "topic": "Binary and hex"}, {"id": "p1-040", "topic": "Binary and hex"}, {"id": "p1-041", "topic": "Binary and hex"}, {"id": "p1-042", "topic": "Network protocols"}, {"id": "p1-043", "topic": "Network protocols"}, {"id": "p1-044", "topic": "Network protocols"}, {"id": "p1-045", "topic": "Network protocols"}, {"id": "p1-046", "topic": "Network protocols"}, {"id": "p1-047", "topic": "Networks"}, {"id": "p1-048", "topic": "Network security"}, {"id": "p1-049", "topic": "Network security"}, {"id": "p1-050", "topic": "Network security"}, {"id": "p1-051", "topic": "Utility software"}, {"id": "p1-052", "topic": "Ethics and law"}, {"id": "p1-053", "topic": "Ethics and law"}, {"id": "p1-054", "topic": "Ethics and law"}, {"id": "p2-031", "topic": "Computational thinking"}, {"id": "p2-032", "topic": "Computational thinking"}, {"id": "p2-033", "topic": "Searching"}, {"id": "p2-034", "topic": "Sorting"}, {"id": "p2-035", "topic": "Sorting"}, {"id": "p2-036", "topic": "Sorting"}, {"id": "p2-037", "topic": "Programming basics"}, {"id": "p2-038", "topic": "Data types"}, {"id": "p2-039", "topic": "Strings"}, {"id": "p2-040", "topic": "Arrays"}, {"id": "p2-041", "topic": "Arrays"}, {"id": "p2-042", "topic": "Records"}, {"id": "p2-043", "topic": "SQL"}, {"id": "p2-044", "topic": "File handling"}, {"id": "p2-045", "topic": "Subprograms"}, {"id": "p2-046", "topic": "Subprograms"}, {"id": "p2-047", "topic": "Random numbers"}, {"id": "p2-048", "topic": "Testing"}, {"id": "p2-049", "topic": "Testing"}, {"id": "p2-050", "topic": "Testing"}, {"id": "p2-051", "topic": "IDE"}, {"id": "p2-052", "topic": "Languages"}, {"id": "p2-053", "topic": "Languages"}, {"id": "p2-054", "topic": "OCR Reference Language"}, {"id": "p2-055", "topic": "OCR Reference Language"}];
+    const specItems = [
+      ["1.1", "Systems architecture", "CPU, registers, performance and embedded systems"],
+      ["1.2", "Memory and storage", "RAM, ROM, storage, units, data representation and compression"],
+      ["1.3", "Networks, connections and protocols", "LANs, WANs, topologies, internet, protocols and layers"],
+      ["1.4", "Network security", "Threats, vulnerabilities and prevention methods"],
+      ["1.5", "Systems software", "Operating systems and utility software"],
+      ["1.6", "Impacts of digital technology", "Ethical, legal, cultural, environmental and privacy issues"],
+      ["2.1", "Algorithms", "Computational thinking, trace tables, searching and sorting"],
+      ["2.2", "Programming fundamentals", "Variables, data types, constructs, arrays, files, SQL and subprograms"],
+      ["2.3", "Robust programs", "Defensive design, validation, maintainability and testing"],
+      ["2.4", "Boolean logic", "Logic gates, truth tables and combined expressions"],
+      ["2.5", "Languages and IDEs", "High/low-level languages, translators and IDE tools"]
+    ];
+    const areaInfo = {
+      daily: { label: "Daily Practice", href: "daily-practice/index.html" },
+      flashcards: { label: "Flashcards", href: "flashcards/index.html" },
+      number: { label: "Number Systems", href: "number-systems/index.html" }
+    };
+    function readJson(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } }
+    function dateKey(offset) { const d = new Date(); d.setDate(d.getDate() + offset); return d.toISOString().slice(0,10); }
+    function countWeeklyActions() {
+      const daily = readJson(DAILY_KEY, { dailyCompletion: {} });
+      const flash = readJson(FLASH_KEY, { daily: {} });
+      const number = readJson(NUMBER_KEY, { daily: {} });
+      const days = Array.from({length:7}, (_,i)=>dateKey(-i));
+      let count = 0;
+      days.forEach(day => {
+        const d = daily.dailyCompletion && daily.dailyCompletion[day];
+        if (d && d.theory && d.programming) count += 1;
+        if (flash.daily && flash.daily[day]) count += 1;
+        if (number.daily && number.daily[day]) count += 1;
+      });
+      return Math.min(count, 5);
+    }
+    function renderDashboard() {
+      const daily = readJson(DAILY_KEY, { currentStreak: 0, bestStreak: 0, daysCompleted: 0 });
+      const flash = readJson(FLASH_KEY, { streak: 0, weak: [] });
+      const bestStreak = Math.max(daily.currentStreak || 0, flash.streak || 0);
+      const lastArea = areaInfo[localStorage.getItem(LAST_AREA_KEY)] || areaInfo.daily;
+      document.getElementById("continueButton").href = lastArea.href;
+      document.getElementById("continueButton").textContent = "Continue: " + lastArea.label;
+      document.getElementById("lastAreaPill").textContent = "Last area: " + lastArea.label;
+      document.getElementById("streakPill").textContent = "Streak: " + bestStreak;
+      document.getElementById("coachMessage").textContent = bestStreak > 0 ? "Good. Keep the routine small and repeatable. Your progress is saved on this device." : "Start with one short task today. The aim is consistency, not a long session.";
+      const weekly = countWeeklyActions();
+      document.getElementById("weeklyGoalFill").style.width = (weekly / 5 * 100) + "%";
+      document.getElementById("weeklyGoalText").textContent = weekly + " / 5 completed";
+    }
+    function renderWeakTopics() {
+      const flash = readJson(FLASH_KEY, { weak: [], topicStats: {} });
+      const counts = {};
+      (flash.weak || []).forEach(id => {
+        const item = weakMap.find(x => x.id === id);
+        if (item) counts[item.topic] = (counts[item.topic] || 0) + 1;
+      });
+      if (flash.topicStats) {
+        Object.keys(flash.topicStats).forEach(topic => {
+          const stat = flash.topicStats[topic];
+          const need = (stat.revise || 0) + Math.floor((stat.nearly || 0) / 2);
+          if (need > 0) counts[topic] = Math.max(counts[topic] || 0, need);
+        });
+      }
+      const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,3);
+      const list = document.getElementById("weakTopicList");
+      if (!top.length) {
+        list.innerHTML = "<p>No weak topics yet. Use Flashcards and mark cards as <strong>Revise</strong> to build this list.</p>";
+        return;
+      }
+      list.innerHTML = top.map(([topic,count]) => "<div class='weak-topic'>" + topic + "<span>" + count + " revisit point" + (count === 1 ? "" : "s") + "</span></div>").join("");
+    }
+    function renderChecklist() {
+      const saved = readJson(CHECKLIST_KEY, {});
+      const box = document.getElementById("specChecklist");
+      box.innerHTML = specItems.map(item => {
+        const checked = saved[item[0]] ? "checked" : "";
+        return "<label class='check-item'><input type='checkbox' data-spec='" + item[0] + "' " + checked + "><span><strong>" + item[0] + " " + item[1] + "</strong><small>" + item[2] + "</small></span></label>";
+      }).join("");
+      updateChecklistCount();
+    }
+    function updateChecklistCount() {
+      const saved = readJson(CHECKLIST_KEY, {});
+      const done = specItems.filter(item => saved[item[0]]).length;
+      document.getElementById("specProgressPill").textContent = done + " / " + specItems.length + " secure";
+    }
+    document.addEventListener("change", function(e) {
+      const spec = e.target && e.target.getAttribute("data-spec");
+      if (!spec) return;
+      const saved = readJson(CHECKLIST_KEY, {});
+      saved[spec] = e.target.checked;
+      localStorage.setItem(CHECKLIST_KEY, JSON.stringify(saved));
+      updateChecklistCount();
+    });
+    document.querySelectorAll("[data-area]").forEach(function(link) {
+      link.addEventListener("click", function() { localStorage.setItem(LAST_AREA_KEY, link.getAttribute("data-area")); });
+    });
+    renderDashboard();
+    renderWeakTopics();
+    renderChecklist();
+
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function() {
         navigator.serviceWorker.register("service-worker.js").catch(function() {
