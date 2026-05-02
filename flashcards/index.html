@@ -6,7 +6,7 @@
   <title>GCSE Computing Flashcard Sprint</title>
   <meta name="theme-color" content="#111827" />
   <meta name="description" content="Fast GCSE Computer Science flashcard revision with student topic selection." />
-  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="manifest" href="../manifest.webmanifest" />
   <style>
     :root {
       --bg: #eef2f7;
@@ -565,6 +565,56 @@
       { id: "p2-028", paper: "Paper 2", topic: "Programming", type: "Boolean", front: "What is the output?", code: "x = 7\ny = 12\nprint(x > 5 and y < 10)", back: "False", tip: "AND requires both parts to be true." },
       { id: "p2-029", paper: "Paper 2", topic: "Programming", type: "While loop", front: "What is the output?", code: "count = 1\nwhile count < 4:\n    print(count)\n    count = count + 1", back: "1\n2\n3", tip: "4 is not printed because the condition becomes false." },
       { id: "p2-030", paper: "Paper 2", topic: "Programming", type: "File handling", front: "Explain what this code does.", code: "file = open('names.txt', 'a')\nfile.write('Asha\\n')\nfile.close()", back: "It opens names.txt in append mode, writes Asha on a new line, and closes the file.", tip: "Append adds to the end rather than replacing the file." }
+
+      ,{ id: "p1-031", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the MAR?", back: "The Memory Address Register stores the address of the memory location currently being read from or written to.", tip: "MAR stores an address, not the data itself." }
+      ,{ id: "p1-032", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the MDR?", back: "The Memory Data Register stores the data that has just been fetched from memory or is about to be written to memory.", tip: "MDR stores data; MAR stores the address." }
+      ,{ id: "p1-033", paper: "Paper 1", topic: "CPU", type: "Explain", front: "Describe the fetch-execute cycle in simple terms.", back: "The CPU fetches the next instruction from memory, decodes what it means, then executes it. The program counter is updated so the next instruction can be fetched.", tip: "Use fetch, decode and execute." }
+      ,{ id: "p1-034", paper: "Paper 1", topic: "Embedded systems", type: "Definition", front: "What is an embedded system?", back: "A computer system built into another device, usually designed to perform a specific task.", tip: "Examples include washing machines, traffic lights and microwaves." }
+      ,{ id: "p1-035", paper: "Paper 1", topic: "Data units", type: "Recall", front: "Put these data units in order from smallest to largest: byte, bit, megabyte, nibble, kilobyte.", back: "bit, nibble, byte, kilobyte, megabyte.", tip: "A nibble is 4 bits; a byte is 8 bits." }
+      ,{ id: "p1-036", paper: "Paper 1", topic: "Data units", type: "Calculation", front: "How is the file size of an image calculated?", back: "Image file size = width in pixels × height in pixels × colour depth in bits.", tip: "Convert bits to bytes if the question asks for bytes." }
+      ,{ id: "p1-037", paper: "Paper 1", topic: "Data units", type: "Calculation", front: "How is the file size of a sound file calculated?", back: "Sound file size = sample rate × duration in seconds × bit depth.", tip: "Sample rate is measured in Hertz." }
+      ,{ id: "p1-038", paper: "Paper 1", topic: "Characters", type: "Explain", front: "Why can Unicode represent more characters than ASCII?", back: "Unicode uses more bits per character, so it can represent a much larger number of possible characters and symbols.", tip: "More bits means more possible combinations." }
+      ,{ id: "p1-039", paper: "Paper 1", topic: "Binary and hex", type: "Explain", front: "What is overflow in binary addition?", back: "Overflow occurs when the result of a binary calculation is too large to fit in the number of bits available.", tip: "For 8 bits, values above 255 overflow." }
+      ,{ id: "p1-040", paper: "Paper 1", topic: "Binary and hex", type: "Explain", front: "What is the effect of a left binary shift?", back: "A left binary shift usually multiplies the number by 2 for each place shifted, as long as no significant bits are lost.", tip: "Left shift = multiply by powers of 2." }
+      ,{ id: "p1-041", paper: "Paper 1", topic: "Binary and hex", type: "Explain", front: "What is the effect of a right binary shift?", back: "A right binary shift usually divides the number by 2 for each place shifted, discarding bits that move beyond the right-hand end.", tip: "Right shift = divide by powers of 2." }
+      ,{ id: "p1-042", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the purpose of HTTPS?", back: "HTTPS is used to securely transfer web pages and data between a browser and a web server using encryption.", tip: "HTTPS is the secure version of HTTP." }
+      ,{ id: "p1-043", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the purpose of SMTP?", back: "SMTP is used to send emails from a client to a mail server or between mail servers.", tip: "SMTP sends mail." }
+      ,{ id: "p1-044", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the difference between POP and IMAP?", back: "POP downloads emails to a device, often removing them from the server. IMAP keeps emails on the server and synchronises them across devices.", tip: "IMAP is better for multiple devices." }
+      ,{ id: "p1-045", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the purpose of FTP?", back: "FTP is used to transfer files between computers over a network.", tip: "FTP = File Transfer Protocol." }
+      ,{ id: "p1-046", paper: "Paper 1", topic: "Network protocols", type: "Explain", front: "Why are layers used in network protocols?", back: "Layers split communication into manageable parts, allow different layers to be developed independently, and help standards work across different systems.", tip: "Benefits: modular, standardised, easier to manage." }
+      ,{ id: "p1-047", paper: "Paper 1", topic: "Networks", type: "Cloud", front: "Give two advantages and two disadvantages of cloud storage.", back: "Advantages include access from anywhere and easier backup. Disadvantages include needing internet access, possible subscription costs, and reliance on a provider.", tip: "Always link to the scenario if one is given." }
+      ,{ id: "p1-048", paper: "Paper 1", topic: "Network security", type: "Threat", front: "What is an SQL injection attack?", back: "An attacker enters SQL into an input field to try to view, change or delete data in a database.", tip: "It exploits poorly validated input." }
+      ,{ id: "p1-049", paper: "Paper 1", topic: "Network security", type: "Threat", front: "What is a denial of service attack?", back: "A DoS attack floods a system with traffic or requests so legitimate users cannot access the service.", tip: "The aim is disruption, not usually data theft." }
+      ,{ id: "p1-050", paper: "Paper 1", topic: "Network security", type: "Prevention", front: "How can user access levels improve security?", back: "They limit users to only the files, data and functions they need, reducing damage from mistakes or unauthorised access.", tip: "Least privilege is the core idea." }
+      ,{ id: "p1-051", paper: "Paper 1", topic: "Utility software", type: "Utility", front: "What is the purpose of defragmentation?", back: "Defragmentation rearranges files on a magnetic disk so related parts are stored together, improving access speed.", tip: "It is relevant to magnetic storage, not SSDs in the same way." }
+      ,{ id: "p1-052", paper: "Paper 1", topic: "Ethics and law", type: "Law", front: "What is the purpose of the Computer Misuse Act?", back: "It makes unauthorised access to computer systems and related offences illegal.", tip: "Think hacking and unauthorised access." }
+      ,{ id: "p1-053", paper: "Paper 1", topic: "Ethics and law", type: "Law", front: "What is the purpose of the Data Protection Act 2018?", back: "It controls how personal data should be collected, stored, processed and protected.", tip: "Focus on personal data and rights." }
+      ,{ id: "p1-054", paper: "Paper 1", topic: "Ethics and law", type: "Licence", front: "Compare open source and proprietary software licences.", back: "Open source software gives access to the source code and allows it to be modified. Proprietary software usually keeps the source code private and restricts copying or modification.", tip: "A comparison must mention both sides." }
+      ,{ id: "p2-031", paper: "Paper 2", topic: "Computational thinking", type: "Definition", front: "What is abstraction?", back: "Abstraction means removing unnecessary detail and focusing on the important parts of a problem.", tip: "Abstraction helps simplify complex problems." }
+      ,{ id: "p2-032", paper: "Paper 2", topic: "Computational thinking", type: "Definition", front: "What is decomposition?", back: "Decomposition means breaking a large problem into smaller, more manageable sub-problems.", tip: "Decompose before designing the solution." }
+      ,{ id: "p2-033", paper: "Paper 2", topic: "Searching", type: "Algorithm", front: "What must be true before a binary search can be used?", back: "The data must be sorted into order first.", tip: "Binary search repeatedly halves the search area." }
+      ,{ id: "p2-034", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "Describe one pass of a bubble sort.", back: "Adjacent items are compared and swapped if they are in the wrong order. This continues along the list, moving a larger item towards the end.", tip: "Bubble sort compares neighbours." }
+      ,{ id: "p2-035", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "Describe the main idea of insertion sort.", back: "Insertion sort takes each item and inserts it into the correct position within the already sorted part of the list.", tip: "Like sorting playing cards in your hand." }
+      ,{ id: "p2-036", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "Describe the main idea of merge sort.", back: "Merge sort repeatedly splits a list into smaller lists, then merges them back together in sorted order.", tip: "Split, then merge in order." }
+      ,{ id: "p2-037", paper: "Paper 2", topic: "Programming basics", type: "Operator", front: "What is the difference between DIV and MOD?", back: "DIV gives the whole-number quotient after division. MOD gives the remainder.", tip: "17 DIV 5 = 3; 17 MOD 5 = 2." }
+      ,{ id: "p2-038", paper: "Paper 2", topic: "Data types", type: "Casting", front: "Why might a program cast a string to an integer?", back: "Input is often received as text. Casting to integer allows the value to be used in calculations.", tip: "Example: int(ageInput)." }
+      ,{ id: "p2-039", paper: "Paper 2", topic: "Strings", type: "Manipulation", front: "Name two basic string manipulation techniques in the OCR specification.", back: "Concatenation and slicing are required. Length, uppercase and lowercase are also useful in OCR reference language.", tip: "Concatenation joins strings; slicing extracts part." }
+      ,{ id: "p2-040", paper: "Paper 2", topic: "Arrays", type: "Definition", front: "What is a one-dimensional array?", back: "A fixed-length data structure that stores multiple values of the same data type using one index.", tip: "OCR arrays are zero-indexed." }
+      ,{ id: "p2-041", paper: "Paper 2", topic: "Arrays", type: "Definition", front: "How can a 2D array be used?", back: "A 2D array can store data in rows and columns, such as a grid or a simple table of records and fields.", tip: "Use two indexes: row and column." }
+      ,{ id: "p2-042", paper: "Paper 2", topic: "Records", type: "Definition", front: "What is a record?", back: "A record stores related data about one item or person, usually made up of several fields.", tip: "Example: one student record may contain name, form and score." }
+      ,{ id: "p2-043", paper: "Paper 2", topic: "SQL", type: "Syntax", front: "What do SELECT, FROM and WHERE do in SQL?", back: "SELECT chooses the fields to display, FROM chooses the table, and WHERE sets the condition used to filter records.", tip: "OCR only requires simple SELECT, FROM and WHERE." }
+      ,{ id: "p2-044", paper: "Paper 2", topic: "File handling", type: "Process", front: "Name four basic file handling operations.", back: "Open, read, write and close.", tip: "Always close the file after use." }
+      ,{ id: "p2-045", paper: "Paper 2", topic: "Subprograms", type: "Compare", front: "What is the difference between a function and a procedure?", back: "A function returns a value. A procedure performs a task but does not have to return a value.", tip: "Return value = function." }
+      ,{ id: "p2-046", paper: "Paper 2", topic: "Subprograms", type: "Scope", front: "What is the difference between a local and global variable?", back: "A local variable is only available within the subprogram or block where it is created. A global variable can be accessed more widely across the program.", tip: "Avoid overusing globals." }
+      ,{ id: "p2-047", paper: "Paper 2", topic: "Random numbers", type: "Use", front: "Give one use of random number generation in a program.", back: "It can be used for games, simulations, quizzes, testing, or selecting a random item.", tip: "OCR may ask for use in a scenario." }
+      ,{ id: "p2-048", paper: "Paper 2", topic: "Testing", type: "Test data", front: "What is boundary test data?", back: "Boundary test data is valid or invalid data at the edge of an accepted range.", tip: "For 1 to 10, boundary values include 1, 10, 0 and 11." }
+      ,{ id: "p2-049", paper: "Paper 2", topic: "Testing", type: "Test data", front: "What is the difference between invalid and erroneous test data?", back: "Invalid data is the correct data type but outside the allowed range. Erroneous data is the wrong data type and should be rejected.", tip: "Example: age 200 is invalid; age 'cat' is erroneous." }
+      ,{ id: "p2-050", paper: "Paper 2", topic: "Testing", type: "Error", front: "What is the difference between a syntax error and a logic error?", back: "A syntax error breaks the rules of the language and may stop the program running. A logic error allows the program to run but gives the wrong result.", tip: "Logic errors are often harder to spot." }
+      ,{ id: "p2-051", paper: "Paper 2", topic: "IDE", type: "Tool", front: "Name three tools or facilities commonly found in an IDE.", back: "Editor, error diagnostics, run-time environment and translator.", tip: "Explain how each helps the programmer if asked." }
+      ,{ id: "p2-052", paper: "Paper 2", topic: "Languages", type: "Compare", front: "Compare high-level and low-level programming languages.", back: "High-level languages are closer to human language and easier to write. Low-level languages are closer to machine code and give more direct hardware control.", tip: "Mention ease for humans and closeness to hardware." }
+      ,{ id: "p2-053", paper: "Paper 2", topic: "Languages", type: "Translator", front: "What is the difference between a compiler and an interpreter?", back: "A compiler translates the whole program before running. An interpreter translates and runs the program one line at a time.", tip: "Each has benefits and drawbacks." }
+      ,{ id: "p2-054", paper: "Paper 2", topic: "OCR Reference Language", type: "Syntax", front: "In OCR reference language, what does this mean?", code: "for i = 0 to 9\n  print(i)\nnext i", back: "It is a count-controlled loop that prints the values 0 through 9 inclusive.", tip: "OCR for loops include the final value." }
+      ,{ id: "p2-055", paper: "Paper 2", topic: "OCR Reference Language", type: "Syntax", front: "In OCR reference language, what does .substring(x, i) do?", back: "It returns a substring starting at index x with length i. Indexing starts at 0.", tip: "x is the start; i is the number of characters." }
     ];
 
     let deck = [];
@@ -623,6 +673,24 @@
       "Defensive design": "2.3 Producing robust programs: Defensive design",
       "Logic": "2.4 Boolean logic",
       "Programming": "2.2–2.3 Programming practice"
+
+      ,"Embedded systems": "1.1 Systems architecture: Embedded systems"
+      ,"Data units": "1.2 Memory and storage: Units and file size calculations"
+      ,"Characters": "1.2 Data representation: Characters and character sets"
+      ,"Binary and hex": "1.2 Data representation: Binary, hexadecimal and shifts"
+      ,"Network protocols": "1.3 Protocols, addressing, standards and layers"
+      ,"Utility software": "1.5 Systems software: Utility software"
+      ,"Computational thinking": "2.1 Algorithms: Computational thinking"
+      ,"Strings": "2.2 Programming fundamentals: String manipulation"
+      ,"Arrays": "2.2 Additional programming techniques: 1D and 2D arrays"
+      ,"Records": "2.2 Additional programming techniques: Records"
+      ,"SQL": "2.2 Additional programming techniques: SQL"
+      ,"File handling": "2.2 Additional programming techniques: File handling"
+      ,"Random numbers": "2.2 Additional programming techniques: Random numbers"
+      ,"Testing": "2.3 Producing robust programs: Testing"
+      ,"IDE": "2.5 Integrated Development Environments"
+      ,"Languages": "2.5 Programming languages and translators"
+      ,"OCR Reference Language": "3c OCR Exam Reference Language"
     };
 
     function specLabel(topic) {
@@ -650,7 +718,18 @@
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (!saved) return fallback;
-        if (!saved.selectedTopics || !Array.isArray(saved.selectedTopics)) saved.selectedTopics = allTopics();
+        if (!saved.selectedTopics || !Array.isArray(saved.selectedTopics)) {
+          saved.selectedTopics = allTopics();
+        } else {
+          // Preserve existing student choices, but include any newly added specification topics.
+          const currentTopics = allTopics();
+          currentTopics.forEach(function(topic) {
+            if (!saved.selectedTopics.includes(topic)) saved.selectedTopics.push(topic);
+          });
+          saved.selectedTopics = saved.selectedTopics.filter(function(topic) {
+            return currentTopics.includes(topic);
+          });
+        }
         if (!saved.daily) saved.daily = {};
         if (!saved.weak) saved.weak = [];
         return saved;
