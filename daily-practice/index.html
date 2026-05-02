@@ -6,7 +6,7 @@
   <title>GCSE Computing Daily Practice</title>
   <meta name="theme-color" content="#111827" />
   <meta name="description" content="Daily OCR GCSE Computer Science theory and programming practice." />
-  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="manifest" href="../manifest.webmanifest" />
   <style>
     :root {
       --bg:#eef2f7;--card:#fff;--text:#172033;--muted:#64748b;--border:#d6dce8;
@@ -698,6 +698,57 @@ const theoryQuestions = [
     ],
     "modelAnswer": "An IDE may provide syntax highlighting to make code easier to read and debugging tools to help find and fix errors.",
     "misconception": "An IDE is not the programming language itself."
+  },
+  {
+    "topic": "1.2 Memory and storage",
+    "question": "A bitmap image is 800 pixels wide and 600 pixels high. It uses a colour depth of 8 bits. Calculate the file size in bytes.",
+    "marks": 3,
+    "markScheme": [
+      "800 × 600 × 8 bits",
+      "= 3,840,000 bits",
+      "÷ 8 = 480,000 bytes"
+    ],
+    "modelAnswer": "800 × 600 × 8 = 3,840,000 bits. 3,840,000 ÷ 8 = 480,000 bytes.",
+    "misconception": "Do not forget to convert from bits to bytes if bytes are requested."
+  },
+  {
+    "topic": "1.3 Networks",
+    "question": "Explain why a school might use a client-server network rather than a peer-to-peer network.",
+    "marks": 4,
+    "markScheme": [
+      "Centralised management of users and files",
+      "Easier backup and security control",
+      "Shared services such as printing and file storage",
+      "More suitable for many users, though can be more expensive"
+    ],
+    "modelAnswer": "A client-server network allows the school to manage accounts, files, security and backups centrally. It also makes shared services such as printing and file storage easier to manage across many users.",
+    "misconception": "Do not just say it is faster; explain why it suits the scenario."
+  },
+  {
+    "topic": "1.6 Impacts of technology",
+    "question": "Discuss one benefit and one drawback of using open source software in a school.",
+    "marks": 4,
+    "markScheme": [
+      "Benefit: source code can be viewed or modified",
+      "Benefit: may reduce licence costs",
+      "Drawback: support may be less formal",
+      "Drawback: may need technical expertise to maintain"
+    ],
+    "modelAnswer": "Open source software may reduce licence costs and can be modified if the school has suitable expertise. However, it may have less formal support than proprietary software, so the school may need more technical knowledge to maintain it.",
+    "misconception": "Open source does not automatically mean free, and proprietary does not automatically mean better."
+  },
+  {
+    "topic": "2.4 Boolean logic",
+    "question": "Complete the truth table for A AND NOT B.",
+    "marks": 4,
+    "markScheme": [
+      "A=0, B=0 gives 0",
+      "A=0, B=1 gives 0",
+      "A=1, B=0 gives 1",
+      "A=1, B=1 gives 0"
+    ],
+    "modelAnswer": "A AND NOT B is only true when A is true and B is false.",
+    "misconception": "Apply NOT to B before applying AND."
   }
 ];
 const programmingQuestions = [
@@ -1359,6 +1410,56 @@ const programmingQuestions = [
     ],
     "modelAnswer": "total = 0\nfor i in range(10):\n    score = int(input('Score: '))\n    total = total + score\naverage = total / 10\nprint(average)",
     "misconception": "The division should happen after the loop, not inside it each time."
+  },
+  {
+    "topic": "SQL",
+    "question": "Write an SQL query to display the Name field from the Students table where House is equal to Austen.",
+    "marks": 3,
+    "markScheme": [
+      "SELECT Name",
+      "FROM Students",
+      "WHERE House = 'Austen'"
+    ],
+    "modelAnswer": "SELECT Name\nFROM Students\nWHERE House = 'Austen'",
+    "misconception": "Use WHERE for the condition; FROM names the table."
+  },
+  {
+    "topic": "File handling",
+    "question": "Write OCR reference language to open scores.txt, read and print each line until the end of the file, then close it.",
+    "marks": 5,
+    "markScheme": [
+      "Open file and store in variable",
+      "Use loop with NOT endOfFile()",
+      "Read a line inside the loop",
+      "Print the line",
+      "Close the file"
+    ],
+    "modelAnswer": "myFile = open('scores.txt')\nwhile NOT myFile.endOfFile()\n  print(myFile.readLine())\nendwhile\nmyFile.close()",
+    "misconception": "Do not forget to close the file."
+  },
+  {
+    "topic": "Arrays",
+    "question": "A 2D array called seats stores 10 rows and 5 columns. Write a line to store 'Booked' in row 3, column 2.",
+    "marks": 2,
+    "markScheme": [
+      "Uses array name seats",
+      "Uses two indexes for row and column"
+    ],
+    "modelAnswer": "seats[3,2] = 'Booked'",
+    "misconception": "A 2D array needs two indexes."
+  },
+  {
+    "topic": "Testing",
+    "question": "A program accepts marks from 0 to 100 inclusive. Give one normal, two boundary, one invalid and one erroneous test value.",
+    "marks": 5,
+    "markScheme": [
+      "Normal value within range, e.g. 50",
+      "Boundary values at/around edge, e.g. 0 and 100 or -1 and 101",
+      "Invalid value correct type but outside range, e.g. 101",
+      "Erroneous value wrong type, e.g. 'ten'"
+    ],
+    "modelAnswer": "Normal: 50. Boundary: 0 and 100. Invalid: 101. Erroneous: 'ten'.",
+    "misconception": "Invalid and erroneous do not mean the same thing."
   }
 ];
 
