@@ -3,1488 +3,993 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GCSE Computing Daily Practice</title>
+  <title>GCSE Computing Flashcard Sprint</title>
   <meta name="theme-color" content="#111827" />
-  <meta name="description" content="Daily OCR GCSE Computer Science theory and programming practice." />
+  <meta name="description" content="Fast GCSE Computer Science flashcard revision with student topic selection." />
   <link rel="manifest" href="../manifest.webmanifest" />
   <style>
     :root {
-      --bg:#eef2f7;--card:#fff;--text:#172033;--muted:#64748b;--border:#d6dce8;
-      --primary:#2563eb;--primary-dark:#1d4ed8;--success:#047857;--soft-blue:#eff6ff;
-      --soft-success:#ecfdf5;--code-bg:#0f172a;--code-text:#e5e7eb;
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d6dce8;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #047857;
+      --amber: #b45309;
+      --danger: #b91c1c;
+      --soft-blue: #eff6ff;
+      --soft-success: #ecfdf5;
+      --soft-amber: #fffbeb;
+      --soft-danger: #fef2f2;
+      --code-bg: #0f172a;
+      --code-text: #e5e7eb;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#e8eef8 0%,var(--bg) 45%);color:var(--text);line-height:1.5}
-    header{background:#111827;color:#fff;padding:1.8rem 1rem 2.2rem;text-align:center}
-    header h1{margin:0 0 .35rem;font-size:clamp(1.6rem,4vw,2.5rem)} header p{margin:0;color:#d1d5db;font-size:1.05rem}
-    main{max-width:1150px;margin:-1.2rem auto 0;padding:1.25rem}
-    .top-panel,.daily-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:1rem;margin-bottom:1.25rem}
-    .daily-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .intro-card,.progress-card,.controls,.question-card,.teacher-mode{background:var(--card);border:1px solid var(--border);box-shadow:0 10px 24px rgba(15,23,42,.06);border-radius:20px}
-    .intro-card,.progress-card,.controls,.teacher-mode{padding:1.1rem}
-    .intro-card h2,.progress-card h2{margin:0 0 .4rem;font-size:1.2rem} .intro-card p,.progress-card p{margin:.25rem 0;color:var(--muted)}
-    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.8rem}
-    .stat{background:var(--soft-blue);border:1px solid #bfdbfe;border-radius:14px;padding:.75rem;text-align:center}
-    .stat strong{display:block;font-size:1.45rem;color:#1e3a8a} .stat span{display:block;font-size:.85rem;color:var(--muted)}
-    .controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem}
-    .small-note{color:var(--muted);font-size:.9rem;margin-top:.25rem} .pill-row,.actions{display:flex;gap:.5rem;flex-wrap:wrap}
-    .pill{background:#f8fafc;border:1px solid var(--border);border-radius:999px;padding:.45rem .7rem;color:var(--muted);font-weight:700}
-    button{border:0;border-radius:12px;padding:.8rem 1rem;font-size:1rem;cursor:pointer;background:var(--primary);color:white;font-weight:700}
-    button:hover{background:var(--primary-dark)} button.secondary{background:#e5e7eb;color:#111827} button.success{background:var(--success)}
-    .question-card{padding:1.1rem;display:flex;flex-direction:column;min-height:560px}
-    .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.8rem}
-    .card-top h2{margin:0;font-size:1.25rem} .tag{display:inline-block;background:var(--soft-blue);color:#1e3a8a;border:1px solid #bfdbfe;border-radius:999px;padding:.3rem .55rem;font-size:.82rem;font-weight:700;white-space:nowrap}
-    .marks{color:var(--muted);font-weight:700;margin-top:.25rem}
-    .question-text{background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:.9rem;font-size:1.05rem;font-weight:700;margin-bottom:.85rem}
-    pre{background:var(--code-bg);color:var(--code-text);padding:.9rem;border-radius:14px;overflow-x:auto;font-size:.95rem;line-height:1.4;margin:.5rem 0 .85rem}
-    textarea{width:100%;min-height:140px;padding:.8rem;border:1px solid var(--border);border-radius:14px;resize:vertical;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.45;margin-top:auto}
-    textarea:focus{outline:3px solid #bfdbfe;border-color:var(--primary)}
-    .actions{margin-top:.85rem}
-    .reveal-box{display:none;margin-top:.85rem;border-radius:14px;border:1px solid var(--border);background:#f9fafb;padding:.9rem}
-    .reveal-box h3{margin:.2rem 0 .35rem;font-size:1rem} .reveal-box ul{margin:.25rem 0 .7rem 1.15rem;padding:0} .reveal-box p{margin:.25rem 0 .7rem}
-    .completion-message{display:none;margin-bottom:1rem;padding:1rem;border-radius:16px;background:var(--soft-success);border:1px solid #a7f3d0;color:var(--success);font-weight:700;box-shadow:0 10px 24px rgba(15,23,42,.05)}
-    details summary{cursor:pointer;font-weight:800} .bank-list{margin-top:.8rem;display:grid;gap:.65rem} .bank-item{border:1px solid var(--border);border-radius:12px;padding:.75rem;background:#f8fafc}
-    footer{margin-top:1.5rem;color:var(--muted);font-size:.9rem;text-align:center}
-    @media(max-width:900px){.top-panel,.daily-grid{grid-template-columns:1fr} main{padding:.85rem} .question-card{min-height:auto}}
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #e8eef8 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 1.8rem 1rem 2.2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+    }
+
+    header p {
+      margin: 0;
+      color: #d1d5db;
+      font-size: 1.05rem;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: -1.2rem auto 0;
+      padding: 1.25rem;
+    }
+
+    .panel, .flashcard, .controls, .summary-panel, .topic-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .top-panel {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel, .topic-panel { padding: 1.1rem; }
+
+    .panel h2, .topic-panel h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.2rem;
+    }
+
+    .panel p, .topic-panel p {
+      margin: 0.25rem 0;
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.8rem;
+    }
+
+    .stat {
+      background: var(--soft-blue);
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      color: #1e3a8a;
+    }
+
+    .stat span {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .controls {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      align-items: end;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 1rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+    }
+
+    button:hover { background: var(--primary-dark); }
+    button.secondary { background: #e5e7eb; color: #111827; }
+    button.secondary:hover { background: #d1d5db; }
+    button.success { background: var(--success); }
+    button.success:hover { background: #065f46; }
+    button.amber { background: var(--amber); }
+    button.amber:hover { background: #92400e; }
+    button.danger { background: var(--danger); }
+    button.danger:hover { background: #991b1b; }
+
+    .topic-panel {
+      margin-bottom: 1rem;
+    }
+
+    .topic-panel details summary {
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .topic-panel details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .topic-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 900;
+    }
+
+    .topic-summary span {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .topic-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .topic-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.75rem;
+    }
+
+    .topic-choice {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.65rem;
+      background: #f8fafc;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .topic-choice input {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: var(--primary);
+    }
+
+    .coverage-note {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 14px;
+      background: var(--soft-blue);
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      font-weight: 800;
+    }
+
+    .flashcard {
+      padding: 1.2rem;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.32rem 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      border: 1px solid #bfdbfe;
+      background: var(--soft-blue);
+      color: #1e3a8a;
+    }
+
+    .tag.paper2 {
+      border-color: #bbf7d0;
+      background: var(--soft-success);
+      color: #166534;
+    }
+
+    .tag.weak {
+      border-color: #fecaca;
+      background: var(--soft-danger);
+      color: var(--danger);
+    }
+
+    .progress-text {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .prompt {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      font-size: clamp(1.25rem, 3vw, 1.7rem);
+      font-weight: 900;
+      margin-bottom: 0.9rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 0.9rem;
+      border-radius: 14px;
+      overflow-x: auto;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      margin: 0 0 0.9rem;
+    }
+
+    .answer {
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem;
+      background: #fff;
+      margin-top: 0.4rem;
+    }
+
+    .answer h3 {
+      margin: 0.2rem 0 0.35rem;
+      font-size: 1rem;
+    }
+
+    .answer p, .answer ul {
+      margin-top: 0.25rem;
+    }
+
+    .exam-tip {
+      margin-top: 0.8rem;
+      padding: 0.8rem;
+      border-radius: 14px;
+      background: var(--soft-amber);
+      border: 1px solid #fde68a;
+      color: #78350f;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: auto;
+      padding-top: 1rem;
+    }
+
+    .summary-panel {
+      display: none;
+      padding: 1.1rem;
+      margin-top: 1rem;
+      background: var(--soft-success);
+      border-color: #a7f3d0;
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    .bank-panel {
+      margin-top: 1.25rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1rem;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .bank-list {
+      margin-top: 0.8rem;
+      display: grid;
+      gap: 0.55rem;
+      max-height: 420px;
+      overflow: auto;
+    }
+
+    .bank-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+      background: #f8fafc;
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .top-panel { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      main { padding: 0.85rem; }
+    }
+
+    @media (max-width: 560px) {
+      .flashcard { min-height: 480px; }
+      .card-actions button, .topic-actions button { width: 100%; }
+    }
   </style>
 </head>
 <body>
-<header><h1>GCSE Computing Daily Practice</h1><p>One OCR-style theory question and one programming question each day.</p></header>
-<main>
-<section class="top-panel" aria-label="Daily practice summary">
-  <div class="intro-card"><h2>Daily exam fluency</h2><p>Answer both questions, then reveal the mark scheme and model answer.</p><p>This bank covers OCR J277 Computer Systems and Computational Thinking topics.</p></div>
-  <div class="progress-card"><h2>Your practice streak</h2><p id="streakMessage">Mark both questions as complete to build your streak.</p><div class="stats"><div class="stat"><strong id="currentStreak">0</strong><span>Current streak</span></div><div class="stat"><strong id="bestStreak">0</strong><span>Best streak</span></div><div class="stat"><strong id="daysCompleted">0</strong><span>Days completed</span></div><div class="stat"><strong id="todayStatus">Not yet</strong><span>Today done?</span></div></div></div>
-</section>
-<section class="controls" aria-label="Practice controls"><div><strong>Today’s questions</strong><div class="small-note">Same daily questions for all pupils. Answers are stored only on this device/browser.</div></div><div class="pill-row"><span id="datePill" class="pill">Today</span><span id="completePill" class="pill">Completed: 0 / 2</span><span id="bankPill" class="pill">Bank: 0</span></div><div class="actions"><button id="resetButton" class="secondary">Reset today</button></div></section>
-<div id="completionMessage" class="completion-message">Good work. You have completed today’s theory and programming practice.</div>
-<section class="daily-grid" id="dailyGrid"></section>
-<section class="teacher-mode"><details><summary>Teacher preview: full question bank</summary><div id="bankList" class="bank-list"></div></details></section>
-<footer><p>Suggested routine: answer first, reveal the mark scheme, improve your answer, then mark as complete.</p></footer>
-</main>
-<script>
-const theoryQuestions = [
-  {
-    "topic": "1.1 Systems architecture",
-    "marks": 3,
-    "question": "Explain the purpose of the CPU in a computer system.",
-    "markScheme": [
-      "Fetches, decodes and executes instructions.",
-      "Performs arithmetic and logical operations.",
-      "Controls other parts of the computer system."
-    ],
-    "modelAnswer": "The CPU fetches, decodes and executes program instructions. It performs arithmetic and logical operations and controls the movement of data around the computer system.",
-    "misconception": "The CPU is not long-term storage."
-  },
-  {
-    "topic": "1.1 Systems architecture",
-    "marks": 3,
-    "question": "Describe the role of the ALU and the Control Unit.",
-    "markScheme": [
-      "ALU performs arithmetic operations.",
-      "ALU performs logical operations.",
-      "Control Unit coordinates/controls instruction execution."
-    ],
-    "modelAnswer": "The ALU performs arithmetic and logical operations. The Control Unit coordinates the fetch-decode-execute cycle and controls how data moves between CPU components.",
-    "misconception": "The Control Unit does not perform calculations; the ALU does."
-  },
-  {
-    "topic": "1.1 Systems architecture",
-    "marks": 4,
-    "question": "Explain how increasing cache size may improve CPU performance.",
-    "markScheme": [
-      "Cache is very fast memory close to/on the CPU.",
-      "Frequently used data/instructions can be stored there.",
-      "Reduces need to access slower RAM.",
-      "May improve performance, but only if useful data is cached."
-    ],
-    "modelAnswer": "Cache is very fast memory used to store frequently accessed data and instructions. A larger cache can reduce the number of times the CPU needs to access slower RAM, which may improve performance.",
-    "misconception": "More cache does not automatically make every task faster."
-  },
-  {
-    "topic": "1.1 Systems architecture",
-    "marks": 3,
-    "question": "Explain how clock speed affects CPU performance.",
-    "markScheme": [
-      "Clock speed is the number of cycles per second.",
-      "Higher clock speed can allow more instructions to be processed per second.",
-      "Other factors such as cores and cache also affect performance."
-    ],
-    "modelAnswer": "Clock speed is the number of cycles per second. A higher clock speed can allow the CPU to process more instructions in a given time, although overall performance also depends on factors such as cache and cores.",
-    "misconception": "Clock speed alone does not fully determine CPU performance."
-  },
-  {
-    "topic": "1.1 Systems architecture",
-    "marks": 3,
-    "question": "Explain what is meant by an embedded system and give one example.",
-    "markScheme": [
-      "A computer system built into a larger device.",
-      "Designed for a specific/dedicated task.",
-      "Valid example such as washing machine, microwave, traffic light, car braking system."
-    ],
-    "modelAnswer": "An embedded system is a computer system built into another device to carry out a specific task. For example, a washing machine uses an embedded system to control its wash cycles.",
-    "misconception": "A laptop is not normally described as an embedded system because it is general purpose."
-  },
-  {
-    "topic": "1.1 Systems architecture",
-    "marks": 4,
-    "question": "Describe the purpose of the Program Counter and the Memory Address Register.",
-    "markScheme": [
-      "Program Counter stores the address of the next instruction.",
-      "MAR stores the address currently being accessed in memory.",
-      "Both are registers in the CPU.",
-      "They support the fetch-decode-execute cycle."
-    ],
-    "modelAnswer": "The Program Counter stores the address of the next instruction to be fetched. The Memory Address Register stores the address in memory that is currently being accessed during the fetch-decode-execute cycle.",
-    "misconception": "A register usually stores a value temporarily; it is not the same as secondary storage."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain one difference between RAM and ROM.",
-    "markScheme": [
-      "RAM is volatile; ROM is non-volatile.",
-      "RAM stores currently running programs/data.",
-      "ROM stores boot instructions/firmware."
-    ],
-    "modelAnswer": "RAM is volatile and stores programs and data currently in use. ROM is non-volatile and stores instructions needed to start the computer.",
-    "misconception": "ROM is not used as the main working memory for running programs."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain why virtual memory may be used.",
-    "markScheme": [
-      "Used when RAM is full/insufficient.",
-      "Part of secondary storage is used as temporary memory.",
-      "Allows more/larger programs to run, but is slower than RAM."
-    ],
-    "modelAnswer": "Virtual memory is used when there is not enough RAM. Part of secondary storage is used as temporary memory, allowing programs to continue running, although it is slower than RAM.",
-    "misconception": "Virtual memory is not faster than RAM."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "State three factors that may affect the choice of secondary storage.",
-    "markScheme": [
-      "Capacity.",
-      "Speed/access time.",
-      "Portability.",
-      "Durability/reliability.",
-      "Cost."
-    ],
-    "modelAnswer": "The choice may depend on capacity, speed, portability, durability and cost.",
-    "misconception": "Examples such as SSD and HDD are not factors by themselves."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 4,
-    "question": "Compare solid-state storage with magnetic storage.",
-    "markScheme": [
-      "Solid-state has no moving parts.",
-      "Solid-state usually has faster access times.",
-      "Magnetic storage often provides high capacity at lower cost.",
-      "Magnetic storage may be more vulnerable to damage from movement."
-    ],
-    "modelAnswer": "Solid-state storage has no moving parts and usually gives faster access times. Magnetic storage often offers high capacity for lower cost, but can be slower and more vulnerable to damage from movement.",
-    "misconception": "Do not say SSDs always have greater capacity than HDDs."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 2,
-    "question": "What is meant by a byte?",
-    "markScheme": [
-      "A unit of data.",
-      "Usually made up of 8 bits."
-    ],
-    "modelAnswer": "A byte is a unit of data made up of 8 bits.",
-    "misconception": "A byte is not a single 0 or 1."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain why hexadecimal is used by programmers.",
-    "markScheme": [
-      "It is shorter/more compact than binary.",
-      "It is easier for humans to read and write.",
-      "One hex digit represents four binary bits."
-    ],
-    "modelAnswer": "Hexadecimal is used because it is more compact than binary and easier for humans to read. It also maps neatly to binary because one hex digit represents four bits.",
-    "misconception": "Computers still store and process data in binary."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain what happens when an 8-bit binary addition causes overflow.",
-    "markScheme": [
-      "The result is too large for 8 bits.",
-      "A carry beyond the leftmost bit is produced.",
-      "The stored 8-bit result may be incorrect/truncated."
-    ],
-    "modelAnswer": "Overflow occurs when the result is too large to fit into 8 bits. A carry is produced beyond the leftmost bit, so the stored 8-bit result may be incorrect or truncated.",
-    "misconception": "Overflow is about the available number of bits, not simply whether a calculation is difficult."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain how increasing image resolution affects file size and quality.",
-    "markScheme": [
-      "More pixels are stored.",
-      "Image may show more detail.",
-      "File size usually increases."
-    ],
-    "modelAnswer": "Increasing resolution means more pixels are stored. This can increase detail, but it also usually increases the file size.",
-    "misconception": "Resolution is not the same as colour depth."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain how colour depth affects an image file.",
-    "markScheme": [
-      "More bits are used per pixel.",
-      "More colours can be represented.",
-      "File size usually increases."
-    ],
-    "modelAnswer": "Higher colour depth uses more bits for each pixel. This allows more colours to be represented, but usually increases file size.",
-    "misconception": "Colour depth is not the number of pixels."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 3,
-    "question": "Explain how sample rate affects a sound file.",
-    "markScheme": [
-      "More samples are taken per second.",
-      "The sound can be represented more accurately.",
-      "File size increases."
-    ],
-    "modelAnswer": "A higher sample rate means more samples are taken each second. This can improve accuracy but increases file size.",
-    "misconception": "Sample rate is not the same as bit depth."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "marks": 4,
-    "question": "Explain the difference between lossy and lossless compression.",
-    "markScheme": [
-      "Lossy permanently removes some data.",
-      "Lossy may reduce quality but can greatly reduce file size.",
-      "Lossless allows the original file to be restored exactly.",
-      "Lossless is useful where no data can be lost."
-    ],
-    "modelAnswer": "Lossy compression permanently removes some data, often reducing quality but producing a smaller file. Lossless compression reduces file size while allowing the original file to be restored exactly.",
-    "misconception": "Not all compression reduces quality."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 3,
-    "question": "Explain one advantage and one disadvantage of a client-server network.",
-    "markScheme": [
-      "Advantage: central management/security/backups.",
-      "Advantage: resources can be managed centrally.",
-      "Disadvantage: server failure can affect many users.",
-      "Disadvantage: server setup and maintenance can be expensive."
-    ],
-    "modelAnswer": "A client-server network allows users, security and backups to be managed centrally. However, it can be expensive to set up and if the server fails many users may be affected.",
-    "misconception": "Client-server does not mean every device has equal responsibility."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 3,
-    "question": "Explain one advantage and one disadvantage of peer-to-peer networking.",
-    "markScheme": [
-      "Advantage: simple/cheap to set up.",
-      "Advantage: no dedicated server needed.",
-      "Disadvantage: harder to manage security/backups.",
-      "Disadvantage: performance can suffer as devices share resources."
-    ],
-    "modelAnswer": "Peer-to-peer networking can be cheap and simple because no dedicated server is needed. However, it is harder to manage security and backups centrally.",
-    "misconception": "Peer-to-peer is not usually best for large managed school networks."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 3,
-    "question": "Describe the purpose of a router.",
-    "markScheme": [
-      "Connects networks together.",
-      "Forwards/directs data packets.",
-      "Can choose a route for data to reach a destination."
-    ],
-    "modelAnswer": "A router connects networks and forwards data packets between them, helping data reach the correct destination.",
-    "misconception": "A router is not the same as a switch."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 3,
-    "question": "Describe the purpose of DNS.",
-    "markScheme": [
-      "Translates domain names into IP addresses.",
-      "Allows users to use memorable web addresses.",
-      "Enables the correct server/device to be found."
-    ],
-    "modelAnswer": "DNS translates domain names such as example.com into IP addresses, allowing devices to find the correct server.",
-    "misconception": "DNS does not store whole websites."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 4,
-    "question": "Explain the purpose of packet switching.",
-    "markScheme": [
-      "Data is split into packets.",
-      "Packets may take different routes.",
-      "Packets are reassembled at the destination.",
-      "Improves reliability/efficiency across networks."
-    ],
-    "modelAnswer": "Packet switching splits data into packets that can travel across a network, sometimes by different routes. The packets are reassembled at the destination, improving reliability and efficient use of the network.",
-    "misconception": "Packets are not guaranteed to travel together in one continuous stream."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 3,
-    "question": "Explain why protocols are needed in networks.",
-    "markScheme": [
-      "Protocols are agreed rules.",
-      "They allow devices/systems to communicate correctly.",
-      "They define how data is transmitted, received or formatted."
-    ],
-    "modelAnswer": "Protocols are agreed rules for communication. They allow different devices and systems to send, receive and interpret data correctly.",
-    "misconception": "A protocol is not a physical network device."
-  },
-  {
-    "topic": "1.3 Networks",
-    "marks": 3,
-    "question": "Explain one benefit of using layers in network protocols.",
-    "markScheme": [
-      "Breaks communication into manageable parts.",
-      "Each layer has a specific role.",
-      "Changes in one layer can be made without redesigning all layers.",
-      "Supports compatibility between systems."
-    ],
-    "modelAnswer": "Layering breaks network communication into manageable sections. Each layer has a specific role, making protocols easier to develop and update.",
-    "misconception": "Layers are conceptual; they are not separate physical cables."
-  },
-  {
-    "topic": "1.4 Network security",
-    "marks": 3,
-    "question": "Describe how a firewall helps protect a network.",
-    "markScheme": [
-      "Monitors incoming and outgoing traffic.",
-      "Uses rules to allow or block traffic.",
-      "Helps prevent unauthorised access."
-    ],
-    "modelAnswer": "A firewall monitors network traffic and applies rules to decide whether data should be allowed or blocked, helping prevent unauthorised access.",
-    "misconception": "A firewall is not the same as antivirus software."
-  },
-  {
-    "topic": "1.4 Network security",
-    "marks": 3,
-    "question": "Describe what is meant by phishing and how a user can reduce the risk.",
-    "markScheme": [
-      "Phishing uses fake messages or websites to trick users.",
-      "It attempts to steal sensitive information.",
-      "Risk can be reduced by checking links, sender addresses and not entering details on suspicious sites."
-    ],
-    "modelAnswer": "Phishing is when attackers use fake messages or websites to trick users into revealing sensitive information. Users can reduce the risk by checking links and sender addresses carefully.",
-    "misconception": "Phishing is based on deception, not simply guessing a password."
-  },
-  {
-    "topic": "1.4 Network security",
-    "marks": 3,
-    "question": "Explain how a brute force attack works.",
-    "markScheme": [
-      "Attempts many possible passwords/keys.",
-      "Uses repeated trial and error.",
-      "Can be slowed by strong passwords, lockouts or rate limits."
-    ],
-    "modelAnswer": "A brute force attack repeatedly tries possible passwords until the correct one is found. Strong passwords and account lockouts can reduce the risk.",
-    "misconception": "Brute force does not rely on tricking the user."
-  },
-  {
-    "topic": "1.4 Network security",
-    "marks": 3,
-    "question": "Describe how SQL injection can be used to attack a system.",
-    "markScheme": [
-      "Malicious SQL is entered into an input field.",
-      "The database may run the attacker’s SQL.",
-      "This can expose, change or delete data."
-    ],
-    "modelAnswer": "SQL injection involves entering malicious SQL into an input field. If the system does not handle the input properly, the database may run the command and expose or alter data.",
-    "misconception": "SQL injection targets databases, not ordinary text files."
-  },
-  {
-    "topic": "1.4 Network security",
-    "marks": 4,
-    "question": "Explain how penetration testing can improve network security.",
-    "markScheme": [
-      "Authorised testing attempts to find weaknesses.",
-      "Can identify vulnerabilities before attackers do.",
-      "Results can be used to fix security issues.",
-      "May test policies, software and user behaviour."
-    ],
-    "modelAnswer": "Penetration testing is authorised testing that attempts to find weaknesses in a system. The results can be used to fix vulnerabilities before attackers exploit them.",
-    "misconception": "Penetration testing should be authorised; otherwise it may be illegal."
-  },
-  {
-    "topic": "1.5 Systems software",
-    "marks": 4,
-    "question": "Describe two functions of an operating system.",
-    "markScheme": [
-      "Provides a user interface.",
-      "Manages memory.",
-      "Manages files.",
-      "Manages peripherals/devices.",
-      "Manages processes.",
-      "Provides security/user accounts."
-    ],
-    "modelAnswer": "An operating system provides a user interface so users can interact with the computer. It also manages memory so that programs can run safely and efficiently.",
-    "misconception": "Application software is not the same as the operating system."
-  },
-  {
-    "topic": "1.5 Systems software",
-    "marks": 3,
-    "question": "Explain the purpose of utility software.",
-    "markScheme": [
-      "Performs maintenance/management tasks.",
-      "Examples include encryption, compression, backup or defragmentation.",
-      "Helps keep a computer system efficient, secure or organised."
-    ],
-    "modelAnswer": "Utility software performs maintenance or management tasks, such as compression, encryption or backups, to help keep a computer system useful and secure.",
-    "misconception": "Utility software is not usually used to create documents or presentations."
-  },
-  {
-    "topic": "1.5 Systems software",
-    "marks": 3,
-    "question": "Explain why defragmentation may improve performance on a hard disk drive.",
-    "markScheme": [
-      "Files can become split across different areas of a disk.",
-      "Defragmentation reorganises file parts so they are closer together.",
-      "This can reduce disk head movement/access time."
-    ],
-    "modelAnswer": "On an HDD, files may become fragmented across the disk. Defragmentation reorganises file parts so they are closer together, reducing access time.",
-    "misconception": "Defragmentation is not useful in the same way for SSDs."
-  },
-  {
-    "topic": "1.6 Impacts of technology",
-    "marks": 4,
-    "question": "Explain two environmental impacts of replacing computer hardware frequently.",
-    "markScheme": [
-      "Creates electronic waste.",
-      "Devices may contain harmful materials.",
-      "Manufacturing uses energy and raw materials.",
-      "Transport contributes emissions."
-    ],
-    "modelAnswer": "Replacing hardware frequently creates electronic waste, which may contain harmful materials. Manufacturing replacement devices also uses energy and raw materials.",
-    "misconception": "Avoid vague statements such as 'bad for the planet' without explaining why."
-  },
-  {
-    "topic": "1.6 Impacts of technology",
-    "marks": 4,
-    "question": "Explain two privacy concerns linked to collecting user data.",
-    "markScheme": [
-      "Data may be collected without informed consent.",
-      "Data could be shared or sold unexpectedly.",
-      "Data breaches could expose personal information.",
-      "Users may be tracked or profiled."
-    ],
-    "modelAnswer": "Collecting user data can create privacy concerns if users have not given informed consent. There is also a risk that data could be shared, sold or exposed in a breach.",
-    "misconception": "Privacy is not only about passwords."
-  },
-  {
-    "topic": "1.6 Impacts of technology",
-    "marks": 3,
-    "question": "Explain the purpose of the Computer Misuse Act.",
-    "markScheme": [
-      "Makes unauthorised access to computer systems illegal.",
-      "Covers actions such as hacking or spreading malware.",
-      "Helps protect computer systems and data."
-    ],
-    "modelAnswer": "The Computer Misuse Act makes unauthorised access to computer systems illegal, helping protect systems and data from hacking and related offences.",
-    "misconception": "It is not mainly about copyright."
-  },
-  {
-    "topic": "1.6 Impacts of technology",
-    "marks": 3,
-    "question": "Explain why software may be protected by copyright law.",
-    "markScheme": [
-      "Protects creators’ work from being copied without permission.",
-      "Allows creators/companies to earn money from software.",
-      "Encourages development and innovation."
-    ],
-    "modelAnswer": "Copyright law protects software creators by preventing others from copying or distributing their work without permission. This helps creators earn money and encourages development.",
-    "misconception": "Copyright is different from data protection."
-  },
-  {
-    "topic": "1.6 Impacts of technology",
-    "marks": 4,
-    "question": "Explain one benefit and one drawback of open source software.",
-    "markScheme": [
-      "Benefit: source code can be viewed or modified.",
-      "Benefit: may be free/low cost or community improved.",
-      "Drawback: support may be less formal.",
-      "Drawback: quality/security may vary depending on the project."
-    ],
-    "modelAnswer": "Open source software allows users to view and modify the source code, which can support collaboration and reduce cost. However, formal support may be limited and quality can vary.",
-    "misconception": "Open source does not mean there are no licence conditions."
-  },
-  {
-    "topic": "2.1 Algorithms",
-    "marks": 3,
-    "question": "Explain why decomposition is useful when solving a problem.",
-    "markScheme": [
-      "Breaks a large problem into smaller parts.",
-      "Makes the problem easier to understand and solve.",
-      "Allows parts to be developed, tested or assigned separately."
-    ],
-    "modelAnswer": "Decomposition breaks a large problem into smaller parts, making it easier to understand, develop and test each section.",
-    "misconception": "Decomposition is not the same as deleting detail; that is closer to abstraction."
-  },
-  {
-    "topic": "2.1 Algorithms",
-    "marks": 3,
-    "question": "Explain why a trace table may be useful when testing an algorithm.",
-    "markScheme": [
-      "Shows how variables change step by step.",
-      "Helps identify logic errors.",
-      "Allows expected outputs to be checked."
-    ],
-    "modelAnswer": "A trace table shows how variable values change at each step. This helps identify logic errors and check whether the algorithm gives the expected output.",
-    "misconception": "A trace table helps find errors; it does not automatically fix them."
-  },
-  {
-    "topic": "2.1 Algorithms",
-    "marks": 4,
-    "question": "Describe how a linear search finds an item in a list.",
-    "markScheme": [
-      "Starts at the first item.",
-      "Compares each item with the target.",
-      "Moves through the list in order.",
-      "Stops when the item is found or the list ends."
-    ],
-    "modelAnswer": "A linear search checks each item in order from the start of the list, comparing it with the target value. It stops when the value is found or when every item has been checked.",
-    "misconception": "A linear search does not require the data to be sorted."
-  },
-  {
-    "topic": "2.1 Algorithms",
-    "marks": 4,
-    "question": "Describe how a binary search finds an item in a sorted list.",
-    "markScheme": [
-      "Requires sorted data.",
-      "Checks the middle item.",
-      "Discards the half where the target cannot be.",
-      "Repeats until found or no items remain."
-    ],
-    "modelAnswer": "A binary search works on sorted data. It checks the middle item, discards the half that cannot contain the target, and repeats until the item is found or the search area is empty.",
-    "misconception": "Binary search will not work correctly on unsorted data."
-  },
-  {
-    "topic": "2.1 Algorithms",
-    "marks": 4,
-    "question": "Describe one pass of a bubble sort.",
-    "markScheme": [
-      "Compares adjacent items.",
-      "Swaps them if they are in the wrong order.",
-      "Moves through the list from start to end.",
-      "After a pass, the largest/smallest item may be in its final position depending on order."
-    ],
-    "modelAnswer": "During one pass of a bubble sort, adjacent items are compared and swapped if they are in the wrong order. The algorithm moves through the list, gradually moving the largest item towards the end.",
-    "misconception": "Bubble sort does not simply pick the smallest item first; that is selection sort."
-  },
-  {
-    "topic": "2.1 Algorithms",
-    "marks": 4,
-    "question": "Describe how insertion sort works.",
-    "markScheme": [
-      "Builds a sorted section of the list.",
-      "Takes the next item from the unsorted section.",
-      "Compares it with items in the sorted section.",
-      "Inserts it into the correct position."
-    ],
-    "modelAnswer": "Insertion sort builds a sorted section of the list. It takes each new item, compares it with items already sorted, and inserts it into the correct position.",
-    "misconception": "Insertion sort is not the same process as binary search."
-  },
-  {
-    "topic": "2.2 Programming fundamentals",
-    "marks": 3,
-    "question": "Explain the difference between selection and iteration.",
-    "markScheme": [
-      "Selection makes a decision/chooses a branch.",
-      "Iteration repeats instructions.",
-      "Examples include if for selection and loops for iteration."
-    ],
-    "modelAnswer": "Selection chooses which code to run based on a condition, such as an if statement. Iteration repeats code, such as a for loop or while loop.",
-    "misconception": "Selection does not repeat by itself."
-  },
-  {
-    "topic": "2.2 Programming fundamentals",
-    "marks": 3,
-    "question": "State three common data types and give a suitable example of each.",
-    "markScheme": [
-      "Integer with whole number example.",
-      "Real/float with decimal example.",
-      "Boolean with True/False example.",
-      "String with text example.",
-      "Character with single character example."
-    ],
-    "modelAnswer": "Integer: 7. Real: 3.5. Boolean: True. String: 'hello'. Character: 'A'.",
-    "misconception": "A number stored in quotes may be treated as a string."
-  },
-  {
-    "topic": "2.3 Robust programs",
-    "marks": 4,
-    "question": "Explain why input validation is important.",
-    "markScheme": [
-      "Checks data is sensible/acceptable before processing.",
-      "Reduces errors caused by invalid input.",
-      "Can improve reliability/security.",
-      "Does not prove the data is true."
-    ],
-    "modelAnswer": "Input validation checks that data is acceptable before it is processed. This reduces errors and can improve reliability and security, although it does not prove the data is factually true.",
-    "misconception": "Validation is not the same as verification."
-  },
-  {
-    "topic": "2.3 Robust programs",
-    "marks": 3,
-    "question": "Explain the difference between normal, boundary and erroneous test data.",
-    "markScheme": [
-      "Normal data should be accepted.",
-      "Boundary data is at the edge of the valid range.",
-      "Erroneous data should be rejected."
-    ],
-    "modelAnswer": "Normal test data is valid and should be accepted. Boundary data is at the edge of the valid range. Erroneous data is invalid and should be rejected.",
-    "misconception": "Boundary data is not always invalid."
-  },
-  {
-    "topic": "2.4 Boolean logic",
-    "marks": 3,
-    "question": "Explain the difference between AND and OR.",
-    "markScheme": [
-      "AND is true only when both conditions are true.",
-      "OR is true when at least one condition is true.",
-      "Correct use of Boolean logic terminology."
-    ],
-    "modelAnswer": "AND is true only if both conditions are true. OR is true if at least one condition is true.",
-    "misconception": "OR does not require both conditions to be true."
-  },
-  {
-    "topic": "2.4 Boolean logic",
-    "marks": 2,
-    "question": "State the result of NOT True and explain your answer.",
-    "markScheme": [
-      "Result is False.",
-      "NOT reverses/inverts a Boolean value."
-    ],
-    "modelAnswer": "NOT True is False because NOT reverses the Boolean value.",
-    "misconception": "NOT is not the same as 'not equal to' in every context."
-  },
-  {
-    "topic": "2.5 Languages and IDEs",
-    "marks": 3,
-    "question": "Explain the difference between a compiler and an interpreter.",
-    "markScheme": [
-      "Compiler translates the whole program before running.",
-      "Interpreter translates/runs code line by line.",
-      "Compilers can produce an executable; interpreters can make debugging easier."
-    ],
-    "modelAnswer": "A compiler translates the whole program before it is run and may produce an executable file. An interpreter translates and runs code line by line, which can make testing easier.",
-    "misconception": "Both are translators; neither is the same as an IDE."
-  },
-  {
-    "topic": "2.5 Languages and IDEs",
-    "marks": 3,
-    "question": "Describe two features of an IDE that help programmers.",
-    "markScheme": [
-      "Syntax highlighting.",
-      "Error diagnostics/debugging tools.",
-      "Auto-completion.",
-      "Run-time environment.",
-      "Stepping through code/breakpoints."
-    ],
-    "modelAnswer": "An IDE may provide syntax highlighting to make code easier to read and debugging tools to help find and fix errors.",
-    "misconception": "An IDE is not the programming language itself."
-  },
-  {
-    "topic": "1.2 Memory and storage",
-    "question": "A bitmap image is 800 pixels wide and 600 pixels high. It uses a colour depth of 8 bits. Calculate the file size in bytes.",
-    "marks": 3,
-    "markScheme": [
-      "800 × 600 × 8 bits",
-      "= 3,840,000 bits",
-      "÷ 8 = 480,000 bytes"
-    ],
-    "modelAnswer": "800 × 600 × 8 = 3,840,000 bits. 3,840,000 ÷ 8 = 480,000 bytes.",
-    "misconception": "Do not forget to convert from bits to bytes if bytes are requested."
-  },
-  {
-    "topic": "1.3 Networks",
-    "question": "Explain why a school might use a client-server network rather than a peer-to-peer network.",
-    "marks": 4,
-    "markScheme": [
-      "Centralised management of users and files",
-      "Easier backup and security control",
-      "Shared services such as printing and file storage",
-      "More suitable for many users, though can be more expensive"
-    ],
-    "modelAnswer": "A client-server network allows the school to manage accounts, files, security and backups centrally. It also makes shared services such as printing and file storage easier to manage across many users.",
-    "misconception": "Do not just say it is faster; explain why it suits the scenario."
-  },
-  {
-    "topic": "1.6 Impacts of technology",
-    "question": "Discuss one benefit and one drawback of using open source software in a school.",
-    "marks": 4,
-    "markScheme": [
-      "Benefit: source code can be viewed or modified",
-      "Benefit: may reduce licence costs",
-      "Drawback: support may be less formal",
-      "Drawback: may need technical expertise to maintain"
-    ],
-    "modelAnswer": "Open source software may reduce licence costs and can be modified if the school has suitable expertise. However, it may have less formal support than proprietary software, so the school may need more technical knowledge to maintain it.",
-    "misconception": "Open source does not automatically mean free, and proprietary does not automatically mean better."
-  },
-  {
-    "topic": "2.4 Boolean logic",
-    "question": "Complete the truth table for A AND NOT B.",
-    "marks": 4,
-    "markScheme": [
-      "A=0, B=0 gives 0",
-      "A=0, B=1 gives 0",
-      "A=1, B=0 gives 1",
-      "A=1, B=1 gives 0"
-    ],
-    "modelAnswer": "A AND NOT B is only true when A is true and B is false.",
-    "misconception": "Apply NOT to B before applying AND."
-  }
-];
-const programmingQuestions = [
-  {
-    "topic": "Sequence",
-    "marks": 2,
-    "question": "What is the output of this program?",
-    "code": "x = 5\ny = 3\nprint(x + y)",
-    "markScheme": [
-      "Adds x and y.",
-      "Output is 8."
-    ],
-    "modelAnswer": "8",
-    "misconception": "Do not output the expression x + y; output the result."
-  },
-  {
-    "topic": "Arithmetic operators",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "a = 10\nb = 4\nprint(a // b)\nprint(a % b)",
-    "markScheme": [
-      "Integer division gives 2.",
-      "Modulo gives the remainder 2.",
-      "Outputs 2 then 2."
-    ],
-    "modelAnswer": "2\n2",
-    "misconception": "// is integer division; % gives the remainder."
-  },
-  {
-    "topic": "Selection",
-    "marks": 2,
-    "question": "What is the output of this program?",
-    "code": "score = 67\nif score >= 50:\n    print('Pass')\nelse:\n    print('Fail')",
-    "markScheme": [
-      "67 is greater than or equal to 50.",
-      "Output is Pass."
-    ],
-    "modelAnswer": "Pass",
-    "misconception": "Only one branch of an if/else runs."
-  },
-  {
-    "topic": "Selection",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "temp = 18\nif temp > 25:\n    print('Hot')\nelif temp >= 15:\n    print('Warm')\nelse:\n    print('Cold')",
-    "markScheme": [
-      "temp > 25 is false.",
-      "temp >= 15 is true.",
-      "Output is Warm."
-    ],
-    "modelAnswer": "Warm",
-    "misconception": "elif is only checked if the previous if condition is false."
-  },
-  {
-    "topic": "For loops",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "for i in range(3):\n    print(i)",
-    "markScheme": [
-      "range(3) gives 0, 1, 2.",
-      "The loop runs three times.",
-      "Outputs 0, 1, 2 on separate lines."
-    ],
-    "modelAnswer": "0\n1\n2",
-    "misconception": "range(3) does not include 3."
-  },
-  {
-    "topic": "For loops",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "total = 0\nfor i in range(1, 5):\n    total = total + i\nprint(total)",
-    "markScheme": [
-      "range(1,5) gives 1,2,3,4.",
-      "Total is 1+2+3+4.",
-      "Output is 10."
-    ],
-    "modelAnswer": "10",
-    "misconception": "The stop value 5 is not included."
-  },
-  {
-    "topic": "While loops",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "count = 1\nwhile count < 4:\n    print(count)\n    count = count + 1",
-    "markScheme": [
-      "Loop runs while count is less than 4.",
-      "Prints 1, 2 and 3.",
-      "Stops when count becomes 4."
-    ],
-    "modelAnswer": "1\n2\n3",
-    "misconception": "4 is not printed because count < 4 is false."
-  },
-  {
-    "topic": "Trace table",
-    "marks": 4,
-    "question": "Trace this program and state the final value of total.",
-    "code": "total = 2\nfor n in range(3):\n    total = total * 2",
-    "markScheme": [
-      "Loop runs three times.",
-      "Total becomes 4, then 8, then 16.",
-      "Final value is 16."
-    ],
-    "modelAnswer": "16",
-    "misconception": "Remember the starting value is 2, not 0."
-  },
-  {
-    "topic": "Strings",
-    "marks": 2,
-    "question": "What is the output of this program?",
-    "code": "word = 'python'\nprint(word[0])\nprint(word[3])",
-    "markScheme": [
-      "Index 0 is p.",
-      "Index 3 is h."
-    ],
-    "modelAnswer": "p\nh",
-    "misconception": "String indexing starts at 0."
-  },
-  {
-    "topic": "String slicing",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "word = 'algorithm'\nprint(word[0:4])",
-    "markScheme": [
-      "Slice starts at index 0.",
-      "Stops before index 4.",
-      "Output is algo."
-    ],
-    "modelAnswer": "algo",
-    "misconception": "The end index is not included."
-  },
-  {
-    "topic": "Concatenation",
-    "marks": 2,
-    "question": "What is the output of this program?",
-    "code": "first = 'Ada'\nlast = 'Lovelace'\nprint(first + ' ' + last)",
-    "markScheme": [
-      "Strings are joined together.",
-      "A space is included between them."
-    ],
-    "modelAnswer": "Ada Lovelace",
-    "misconception": "Concatenation does not automatically add spaces."
-  },
-  {
-    "topic": "Casting",
-    "marks": 3,
-    "question": "Explain why int() is needed in this program.",
-    "code": "age = int(input('Enter age: '))\nprint(age + 1)",
-    "markScheme": [
-      "input returns a string.",
-      "int() converts the input to an integer.",
-      "The program can then perform addition."
-    ],
-    "modelAnswer": "input returns text, so int() converts the value to an integer before adding 1.",
-    "misconception": "Without casting, age may be treated as a string."
-  },
-  {
-    "topic": "Lists",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "scores = [4, 7, 9]\nprint(scores[1])",
-    "markScheme": [
-      "List indexing starts at 0.",
-      "scores[1] is the second item.",
-      "Output is 7."
-    ],
-    "modelAnswer": "7",
-    "misconception": "Index 1 is not the first item."
-  },
-  {
-    "topic": "Lists",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "items = ['pen', 'book']\nitems.append('bag')\nprint(len(items))",
-    "markScheme": [
-      "append adds a new item.",
-      "The list then has three items.",
-      "Output is 3."
-    ],
-    "modelAnswer": "3",
-    "misconception": "append changes the list; it does not create printed output by itself."
-  },
-  {
-    "topic": "Lists and loops",
-    "marks": 4,
-    "question": "What is the output of this program?",
-    "code": "numbers = [2, 5, 8]\nfor number in numbers:\n    print(number * 2)",
-    "markScheme": [
-      "Each list item is processed.",
-      "2*2=4, 5*2=10, 8*2=16.",
-      "Outputs 4, 10, 16."
-    ],
-    "modelAnswer": "4\n10\n16",
-    "misconception": "The loop prints each result separately."
-  },
-  {
-    "topic": "2D arrays",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "grid = [[1, 2], [3, 4]]\nprint(grid[1][0])",
-    "markScheme": [
-      "grid[1] is [3,4].",
-      "Index 0 of that row is 3.",
-      "Output is 3."
-    ],
-    "modelAnswer": "3",
-    "misconception": "The first index selects the row/list."
-  },
-  {
-    "topic": "Subprograms",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "def double(x):\n    return x * 2\n\nprint(double(6))",
-    "markScheme": [
-      "Function is called with 6.",
-      "6 * 2 = 12.",
-      "Output is 12."
-    ],
-    "modelAnswer": "12",
-    "misconception": "return does not display a value unless it is printed or used."
-  },
-  {
-    "topic": "Subprograms",
-    "marks": 3,
-    "question": "Complete the function so it returns the larger of two numbers.",
-    "code": "def larger(a, b):\n    # complete this function",
-    "markScheme": [
-      "Uses selection to compare a and b.",
-      "Returns a if a is larger.",
-      "Returns b otherwise."
-    ],
-    "modelAnswer": "def larger(a, b):\n    if a > b:\n        return a\n    else:\n        return b",
-    "misconception": "Printing the value is not the same as returning it."
-  },
-  {
-    "topic": "Boolean logic",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "x = 7\ny = 12\nprint(x > 5 and y < 10)",
-    "markScheme": [
-      "x > 5 is True.",
-      "y < 10 is False.",
-      "True and False gives False."
-    ],
-    "modelAnswer": "False",
-    "misconception": "For AND, both conditions must be true."
-  },
-  {
-    "topic": "Boolean logic",
-    "marks": 3,
-    "question": "What is the output of this program?",
-    "code": "logged_in = False\nadmin = True\nprint(logged_in or admin)",
-    "markScheme": [
-      "logged_in is False.",
-      "admin is True.",
-      "False OR True gives True."
-    ],
-    "modelAnswer": "True",
-    "misconception": "For OR, only one condition needs to be true."
-  },
-  {
-    "topic": "NOT logic",
-    "marks": 2,
-    "question": "What is the output of this program?",
-    "code": "finished = False\nprint(not finished)",
-    "markScheme": [
-      "finished is False.",
-      "NOT False is True."
-    ],
-    "modelAnswer": "True",
-    "misconception": "NOT reverses the Boolean value."
-  },
-  {
-    "topic": "Validation",
-    "marks": 3,
-    "question": "Complete the condition so the loop repeats while age is invalid. Valid ages are 11 to 16 inclusive.",
-    "code": "age = int(input('Age: '))\nwhile __________:\n    age = int(input('Age: '))",
-    "markScheme": [
-      "Checks values below 11.",
-      "Checks values above 16.",
-      "Uses OR because either invalid case should repeat."
-    ],
-    "modelAnswer": "age < 11 or age > 16",
-    "misconception": "Using AND would be wrong because a value cannot be below 11 and above 16 at the same time."
-  },
-  {
-    "topic": "Validation",
-    "marks": 3,
-    "question": "Suggest a validation check for this input and explain why it is useful.",
-    "code": "email = input('Enter email address: ')",
-    "markScheme": [
-      "Presence check could ensure an input is entered.",
-      "Format check could check for @ or a valid pattern.",
-      "Validation reduces invalid data."
-    ],
-    "modelAnswer": "A format check could be used to check that the email address contains @ and follows a suitable pattern.",
-    "misconception": "Validation does not prove the email address belongs to the user."
-  },
-  {
-    "topic": "Logic error",
-    "marks": 3,
-    "question": "This program should calculate an average. Identify and correct the error.",
-    "code": "a = 4\nb = 8\nc = 10\naverage = a + b + c / 3\nprint(average)",
-    "markScheme": [
-      "The error is operator precedence.",
-      "Only c is divided by 3.",
-      "Correct calculation uses brackets."
-    ],
-    "modelAnswer": "average = (a + b + c) / 3",
-    "misconception": "The print statement is not the problem."
-  },
-  {
-    "topic": "Syntax error",
-    "marks": 2,
-    "question": "Identify the syntax error in this program.",
-    "code": "if score > 10\n    print('High')",
-    "markScheme": [
-      "The if line is missing a colon.",
-      "Correct form: if score > 10:"
-    ],
-    "modelAnswer": "The first line needs a colon: if score > 10:",
-    "misconception": "This is a syntax error because the program cannot run as written."
-  },
-  {
-    "topic": "Runtime error",
-    "marks": 3,
-    "question": "Identify the likely runtime error and explain why it occurs.",
-    "code": "numbers = [1, 2, 3]\nprint(numbers[5])",
-    "markScheme": [
-      "Index out of range error.",
-      "The list only has indexes 0, 1 and 2.",
-      "Index 5 does not exist."
-    ],
-    "modelAnswer": "This will cause an index out of range error because numbers[5] tries to access an item that is not in the list.",
-    "misconception": "The list length is 3, but the final valid index is 2."
-  },
-  {
-    "topic": "File handling",
-    "marks": 3,
-    "question": "Explain what this code does.",
-    "code": "file = open('names.txt', 'a')\nfile.write('Asha\\n')\nfile.close()",
-    "markScheme": [
-      "Opens names.txt in append mode.",
-      "Writes Asha followed by a new line.",
-      "Closes the file."
-    ],
-    "modelAnswer": "The code opens names.txt in append mode, adds Asha on a new line, and closes the file.",
-    "misconception": "Append mode adds to the file; it does not overwrite the whole file."
-  },
-  {
-    "topic": "File handling",
-    "marks": 3,
-    "question": "Explain why a file should be closed after use.",
-    "code": "file = open('data.txt', 'w')\nfile.write('done')\nfile.close()",
-    "markScheme": [
-      "Ensures data is saved/written properly.",
-      "Frees system resources.",
-      "Reduces risk of file corruption or access problems."
-    ],
-    "modelAnswer": "Closing a file helps ensure data is saved correctly and frees system resources.",
-    "misconception": "Opening a file does not automatically close it immediately after writing."
-  },
-  {
-    "topic": "SQL",
-    "marks": 3,
-    "question": "Write an SQL query to select the names of students in Year 10 from a table called Students.",
-    "code": "Table: Students(name, yearGroup)",
-    "markScheme": [
-      "Uses SELECT name.",
-      "Uses FROM Students.",
-      "Uses WHERE yearGroup = 10."
-    ],
-    "modelAnswer": "SELECT name FROM Students WHERE yearGroup = 10;",
-    "misconception": "WHERE is used to filter records."
-  },
-  {
-    "topic": "Records",
-    "marks": 3,
-    "question": "Explain why a record would be useful for storing data about one student.",
-    "code": "student = {'name': 'Maya', 'year': 10, 'score': 42}",
-    "markScheme": [
-      "A record groups related fields.",
-      "Different fields can have different data types.",
-      "All data about one entity can be kept together."
-    ],
-    "modelAnswer": "A record groups related fields about one student, such as name, year and score, so the data can be stored together clearly.",
-    "misconception": "A record is not just a single value."
-  },
-  {
-    "topic": "Linear search",
-    "marks": 4,
-    "question": "Describe how a linear search would find 8 in this list.",
-    "code": "numbers = [4, 2, 9, 8, 1]",
-    "markScheme": [
-      "Checks from the first item.",
-      "Compares 4, then 2, then 9 with 8.",
-      "Then compares 8 with 8 and finds a match.",
-      "Can stop when found."
-    ],
-    "modelAnswer": "A linear search checks each item in order: 4, 2, 9 and then 8. When it finds 8, the search can stop.",
-    "misconception": "The list does not need to be sorted for linear search."
-  },
-  {
-    "topic": "Binary search",
-    "marks": 4,
-    "question": "Describe the first two comparisons made by a binary search for 11.",
-    "code": "numbers = [1, 4, 7, 9, 11, 15, 20]",
-    "markScheme": [
-      "Checks the middle value 9 first.",
-      "11 is greater than 9, so search the right half.",
-      "Then checks the middle of the right half, likely 15 or 11 depending method.",
-      "Narrows the search area each time."
-    ],
-    "modelAnswer": "The search first checks the middle value, 9. Since 11 is greater than 9, it searches the right half of the list and then checks the middle value of that smaller section.",
-    "misconception": "Binary search requires sorted data."
-  },
-  {
-    "topic": "Bubble sort",
-    "marks": 4,
-    "question": "Show the list after one full pass of bubble sort in ascending order.",
-    "code": "[5, 2, 4, 1]",
-    "markScheme": [
-      "Compare 5 and 2, swap: [2,5,4,1].",
-      "Compare 5 and 4, swap: [2,4,5,1].",
-      "Compare 5 and 1, swap: [2,4,1,5].",
-      "After one pass: [2,4,1,5]."
-    ],
-    "modelAnswer": "[2, 4, 1, 5]",
-    "misconception": "One pass does not fully sort the list."
-  },
-  {
-    "topic": "Insertion sort",
-    "marks": 4,
-    "question": "Describe what happens when inserting 3 into this sorted section.",
-    "code": "Sorted section: [1, 4, 7]\nNext item: 3",
-    "markScheme": [
-      "Compare 3 with items in the sorted section.",
-      "3 belongs after 1 and before 4.",
-      "4 and 7 shift right.",
-      "New sorted section is [1,3,4,7]."
-    ],
-    "modelAnswer": "3 is compared with the sorted values and inserted between 1 and 4, giving [1, 3, 4, 7].",
-    "misconception": "Insertion sort places the new item into the correct position in the sorted section."
-  },
-  {
-    "topic": "Pseudocode",
-    "marks": 4,
-    "question": "Write an algorithm to output the numbers 1 to 5.",
-    "code": "",
-    "markScheme": [
-      "Uses a loop.",
-      "Starts at 1.",
-      "Stops at 5 or repeats five times.",
-      "Outputs each number."
-    ],
-    "modelAnswer": "for number in range(1, 6):\n    print(number)",
-    "misconception": "range(1, 6) is used in Python because the stop value is not included."
-  },
-  {
-    "topic": "Pseudocode",
-    "marks": 4,
-    "question": "Write an algorithm that asks for 5 numbers and outputs the total.",
-    "code": "",
-    "markScheme": [
-      "Initialises total to 0.",
-      "Uses a loop for 5 inputs.",
-      "Adds each number to total.",
-      "Outputs total."
-    ],
-    "modelAnswer": "total = 0\nfor i in range(5):\n    number = int(input('Enter number: '))\n    total = total + number\nprint(total)",
-    "misconception": "The total must be updated inside the loop."
-  },
-  {
-    "topic": "Authentication",
-    "marks": 4,
-    "question": "Write a simple condition to check whether both username and password are correct.",
-    "code": "username = input('Username: ')\npassword = input('Password: ')\n# correct username is admin, correct password is letmein",
-    "markScheme": [
-      "Compares username with admin.",
-      "Compares password with letmein.",
-      "Uses AND.",
-      "Runs appropriate output/action."
-    ],
-    "modelAnswer": "if username == 'admin' and password == 'letmein':\n    print('Access granted')\nelse:\n    print('Access denied')",
-    "misconception": "Both username and password must be correct, so AND is needed."
-  },
-  {
-    "topic": "Robust programming",
-    "marks": 4,
-    "question": "Improve this input so it rejects numbers below 0.",
-    "code": "score = int(input('Score: '))",
-    "markScheme": [
-      "Uses a loop or condition.",
-      "Checks score < 0.",
-      "Prompts again if invalid.",
-      "Only continues once a valid value is entered."
-    ],
-    "modelAnswer": "score = int(input('Score: '))\nwhile score < 0:\n    score = int(input('Score: '))",
-    "misconception": "This checks range, not whether the input is a number."
-  },
-  {
-    "topic": "Maintainability",
-    "marks": 3,
-    "question": "Explain one way to make this program easier to maintain.",
-    "code": "a=3\nb=4\nc=a*b\nprint(c)",
-    "markScheme": [
-      "Use meaningful variable names.",
-      "Use consistent indentation/spacing.",
-      "Add useful comments if needed."
-    ],
-    "modelAnswer": "Use meaningful variable names such as width, height and area so another programmer can understand the purpose of each value.",
-    "misconception": "Too many obvious comments can make code harder to read."
-  },
-  {
-    "topic": "Constants",
-    "marks": 3,
-    "question": "Explain why a constant could be used in this program.",
-    "code": "price = hours * 12.50",
-    "markScheme": [
-      "12.50 is a value that should not change during the program.",
-      "A named constant makes purpose clearer.",
-      "If the rate changes it can be updated in one place."
-    ],
-    "modelAnswer": "A constant such as HOURLY_RATE could store 12.50, making the code clearer and easier to update if the rate changes.",
-    "misconception": "A constant should not be changed while the program runs."
-  },
-  {
-    "topic": "Nested loops",
-    "marks": 4,
-    "question": "How many times is X printed?",
-    "code": "for row in range(3):\n    for col in range(2):\n        print('X')",
-    "markScheme": [
-      "Outer loop runs 3 times.",
-      "Inner loop runs 2 times for each outer loop.",
-      "3 * 2 = 6.",
-      "X is printed 6 times."
-    ],
-    "modelAnswer": "6",
-    "misconception": "Nested loops multiply the number of repetitions."
-  },
-  {
-    "topic": "Two-way selection",
-    "marks": 3,
-    "question": "Complete the code to output Adult if age is 18 or more, otherwise Child.",
-    "code": "age = int(input('Age: '))\n# complete the code",
-    "markScheme": [
-      "Uses if age >= 18.",
-      "Outputs Adult when true.",
-      "Uses else to output Child."
-    ],
-    "modelAnswer": "if age >= 18:\n    print('Adult')\nelse:\n    print('Child')",
-    "misconception": "Use >= to include age 18."
-  },
-  {
-    "topic": "Counting",
-    "marks": 4,
-    "question": "Write code to count how many numbers in the list are greater than 10.",
-    "code": "numbers = [4, 12, 7, 19, 20]",
-    "markScheme": [
-      "Initialises count to 0.",
-      "Loops through the list.",
-      "Checks if each number is greater than 10.",
-      "Increments count and outputs it."
-    ],
-    "modelAnswer": "count = 0\nfor number in numbers:\n    if number > 10:\n        count = count + 1\nprint(count)",
-    "misconception": "Do not add the numbers themselves; count how many match."
-  },
-  {
-    "topic": "Finding maximum",
-    "marks": 4,
-    "question": "Write code to find the largest number in the list.",
-    "code": "numbers = [4, 12, 7, 19, 20]",
-    "markScheme": [
-      "Initialises largest to first item or suitable starting value.",
-      "Loops through numbers.",
-      "Updates largest when a bigger value is found.",
-      "Outputs largest."
-    ],
-    "modelAnswer": "largest = numbers[0]\nfor number in numbers:\n    if number > largest:\n        largest = number\nprint(largest)",
-    "misconception": "Sorting is not necessary to find the maximum."
-  },
-  {
-    "topic": "String validation",
-    "marks": 3,
-    "question": "Write a condition to check that a password is at least 8 characters long.",
-    "code": "password = input('Password: ')",
-    "markScheme": [
-      "Uses len(password).",
-      "Compares with 8.",
-      "Correctly checks valid or invalid length."
-    ],
-    "modelAnswer": "if len(password) >= 8:\n    print('Valid')\nelse:\n    print('Too short')",
-    "misconception": "len() counts the number of characters in the string."
-  },
-  {
-    "topic": "Random numbers",
-    "marks": 3,
-    "question": "Explain what this line does.",
-    "code": "number = random.randint(1, 6)",
-    "markScheme": [
-      "Generates a random integer.",
-      "The value is from 1 to 6 inclusive.",
-      "Stores it in number."
-    ],
-    "modelAnswer": "It generates a random whole number between 1 and 6 inclusive and stores it in the variable number.",
-    "misconception": "randint includes both end values."
-  },
-  {
-    "topic": "Dry run",
-    "marks": 4,
-    "question": "Dry run this code and state the final values of a and b.",
-    "code": "a = 3\nb = 5\na = a + b\nb = a - b",
-    "markScheme": [
-      "a becomes 8.",
-      "b becomes 8 - 5.",
-      "b becomes 3.",
-      "Final values: a=8, b=3."
-    ],
-    "modelAnswer": "a = 8, b = 3",
-    "misconception": "Each assignment updates the variable before the next line runs."
-  },
-  {
-    "topic": "Input/output",
-    "marks": 3,
-    "question": "Write code that asks for a name and outputs Hello followed by the name.",
-    "code": "",
-    "markScheme": [
-      "Uses input to get name.",
-      "Stores the input in a variable.",
-      "Outputs Hello and the name."
-    ],
-    "modelAnswer": "name = input('Enter name: ')\nprint('Hello ' + name)",
-    "misconception": "Remember to include a space if concatenating strings."
-  },
-  {
-    "topic": "Selection with ranges",
-    "marks": 4,
-    "question": "Write code to output Valid if mark is between 0 and 100 inclusive.",
-    "code": "mark = int(input('Mark: '))",
-    "markScheme": [
-      "Checks mark >= 0.",
-      "Checks mark <= 100.",
-      "Uses AND for valid range.",
-      "Outputs Valid/Invalid appropriately."
-    ],
-    "modelAnswer": "if mark >= 0 and mark <= 100:\n    print('Valid')\nelse:\n    print('Invalid')",
-    "misconception": "For a valid range, both limits must be satisfied."
-  },
-  {
-    "topic": "Algorithm design",
-    "marks": 5,
-    "question": "Write an algorithm that asks for 10 test scores and outputs the average.",
-    "code": "",
-    "markScheme": [
-      "Initialises total.",
-      "Uses a loop for 10 scores.",
-      "Adds each score to total.",
-      "Divides total by 10.",
-      "Outputs the average."
-    ],
-    "modelAnswer": "total = 0\nfor i in range(10):\n    score = int(input('Score: '))\n    total = total + score\naverage = total / 10\nprint(average)",
-    "misconception": "The division should happen after the loop, not inside it each time."
-  },
-  {
-    "topic": "SQL",
-    "question": "Write an SQL query to display the Name field from the Students table where House is equal to Austen.",
-    "marks": 3,
-    "markScheme": [
-      "SELECT Name",
-      "FROM Students",
-      "WHERE House = 'Austen'"
-    ],
-    "modelAnswer": "SELECT Name\nFROM Students\nWHERE House = 'Austen'",
-    "misconception": "Use WHERE for the condition; FROM names the table."
-  },
-  {
-    "topic": "File handling",
-    "question": "Write OCR reference language to open scores.txt, read and print each line until the end of the file, then close it.",
-    "marks": 5,
-    "markScheme": [
-      "Open file and store in variable",
-      "Use loop with NOT endOfFile()",
-      "Read a line inside the loop",
-      "Print the line",
-      "Close the file"
-    ],
-    "modelAnswer": "myFile = open('scores.txt')\nwhile NOT myFile.endOfFile()\n  print(myFile.readLine())\nendwhile\nmyFile.close()",
-    "misconception": "Do not forget to close the file."
-  },
-  {
-    "topic": "Arrays",
-    "question": "A 2D array called seats stores 10 rows and 5 columns. Write a line to store 'Booked' in row 3, column 2.",
-    "marks": 2,
-    "markScheme": [
-      "Uses array name seats",
-      "Uses two indexes for row and column"
-    ],
-    "modelAnswer": "seats[3,2] = 'Booked'",
-    "misconception": "A 2D array needs two indexes."
-  },
-  {
-    "topic": "Testing",
-    "question": "A program accepts marks from 0 to 100 inclusive. Give one normal, two boundary, one invalid and one erroneous test value.",
-    "marks": 5,
-    "markScheme": [
-      "Normal value within range, e.g. 50",
-      "Boundary values at/around edge, e.g. 0 and 100 or -1 and 101",
-      "Invalid value correct type but outside range, e.g. 101",
-      "Erroneous value wrong type, e.g. 'ten'"
-    ],
-    "modelAnswer": "Normal: 50. Boundary: 0 and 100. Invalid: 101. Erroneous: 'ten'.",
-    "misconception": "Invalid and erroneous do not mean the same thing."
-  }
-];
+  <header>
+    <h1>GCSE Computing Flashcard Sprint</h1>
+    <p>Fast recall practice with topic choices for where you are in the course.</p>
+  </header>
 
-const STORAGE_KEY = "gcseComputingDailyPracticeV2";
-let completed = { theory:false, programming:false };
-const dailyGrid=document.getElementById("dailyGrid"),datePill=document.getElementById("datePill"),completePill=document.getElementById("completePill"),bankPill=document.getElementById("bankPill"),resetButton=document.getElementById("resetButton"),completionMessage=document.getElementById("completionMessage"),currentStreakElement=document.getElementById("currentStreak"),bestStreakElement=document.getElementById("bestStreak"),daysCompletedElement=document.getElementById("daysCompleted"),todayStatusElement=document.getElementById("todayStatus"),streakMessageElement=document.getElementById("streakMessage"),bankList=document.getElementById("bankList");
-function todayString(){return new Date().toISOString().slice(0,10)}
-function dayNumber(){return Math.floor(new Date(todayString()+"T00:00:00").getTime()/86400000)}
-function formatDateLabel(){return new Date(todayString()+"T00:00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
-function dateDifferenceInDays(a,b){return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/(24*60*60*1000))}
-function loadProgress(){const fallback={currentStreak:0,bestStreak:0,daysCompleted:0,lastCompletedDate:null,dailyCompletion:{}};try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||fallback}catch{return fallback}}
-function saveProgress(p){localStorage.setItem(STORAGE_KEY,JSON.stringify(p))}
-function getTodayQuestions(){const day=dayNumber();return {theory:theoryQuestions[day%theoryQuestions.length],programming:programmingQuestions[(day*7)%programmingQuestions.length]}}
-function loadTodayCompletion(){const p=loadProgress(),today=todayString();completed=p.dailyCompletion&&p.dailyCompletion[today]?p.dailyCompletion[today]:{theory:false,programming:false}}
-function saveTodayCompletion(){const p=loadProgress(),today=todayString();p.dailyCompletion=p.dailyCompletion||{};p.dailyCompletion[today]=completed;saveProgress(p)}
-function updateProgressDisplay(){const p=loadProgress(),today=todayString(),doneToday=p.lastCompletedDate===today,count=(completed.theory?1:0)+(completed.programming?1:0);currentStreakElement.textContent=p.currentStreak||0;bestStreakElement.textContent=p.bestStreak||0;daysCompletedElement.textContent=p.daysCompleted||0;todayStatusElement.textContent=doneToday?"Yes":"Not yet";completePill.textContent="Completed: "+count+" / 2";datePill.textContent=formatDateLabel();bankPill.textContent="Bank: "+theoryQuestions.length+" theory, "+programmingQuestions.length+" programming";streakMessageElement.textContent=doneToday?"You have completed today’s practice. Come back tomorrow to continue your streak.":"Mark both questions as complete to build your streak.";completionMessage.style.display=doneToday?"block":"none"}
-function markTodayCompleteIfReady(){if(!completed.theory||!completed.programming)return;const p=loadProgress(),today=todayString();if(p.lastCompletedDate===today){updateProgressDisplay();return};if(p.lastCompletedDate&&dateDifferenceInDays(p.lastCompletedDate,today)===1)p.currentStreak=(p.currentStreak||0)+1;else p.currentStreak=1;p.bestStreak=Math.max(p.bestStreak||0,p.currentStreak);p.daysCompleted=(p.daysCompleted||0)+1;p.lastCompletedDate=today;p.dailyCompletion=p.dailyCompletion||{};p.dailyCompletion[today]=completed;saveProgress(p);updateProgressDisplay()}
-function escapeHtml(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function renderQuestionCard(kind,data){const hasCode=data.code?'<pre><code>'+escapeHtml(data.code)+'</code></pre>':'';const points=data.markScheme.map(p=>'<li>'+escapeHtml(p)+'</li>').join('');return '<article class="question-card" id="card-'+kind+'"><div class="card-top"><div><h2>'+(kind==="theory"?"Theory Question":"Programming Question")+'</h2><div class="marks">'+data.marks+' marks</div></div><span class="tag">'+escapeHtml(data.topic)+'</span></div><div class="question-text">'+escapeHtml(data.question)+'</div>'+hasCode+'<label for="answer-'+kind+'"><strong>Your answer</strong></label><textarea id="answer-'+kind+'" placeholder="Write your answer here, or use your exercise book and summarise your answer."></textarea><div class="actions"><button data-reveal="'+kind+'">Reveal mark scheme</button><button data-complete="'+kind+'" class="success">I have checked this</button></div><div class="reveal-box" id="reveal-'+kind+'"><h3>Mark scheme</h3><ul>'+points+'</ul><h3>Model answer</h3><p>'+escapeHtml(data.modelAnswer).replace(/\n/g,"<br>")+'</p><h3>Common mistake</h3><p>'+escapeHtml(data.misconception)+'</p></div></article>'}
-function renderDailyQuestions(){const d=getTodayQuestions();dailyGrid.innerHTML=renderQuestionCard("theory",d.theory)+renderQuestionCard("programming",d.programming);Object.keys(completed).forEach(k=>{if(completed[k]){const c=document.getElementById("card-"+k);if(c)c.style.borderColor="#a7f3d0"}})}
-function renderBankPreview(){const t=theoryQuestions.map((q,i)=>'<div class="bank-item"><strong>Theory '+(i+1)+': '+escapeHtml(q.topic)+'</strong><br>'+escapeHtml(q.question)+'</div>').join('');const p=programmingQuestions.map((q,i)=>'<div class="bank-item"><strong>Programming '+(i+1)+': '+escapeHtml(q.topic)+'</strong><br>'+escapeHtml(q.question)+'</div>').join('');bankList.innerHTML='<h3>Theory questions</h3>'+t+'<h3>Programming questions</h3>'+p}
-dailyGrid.addEventListener("click",e=>{const r=e.target.getAttribute("data-reveal"),c=e.target.getAttribute("data-complete");if(r){const box=document.getElementById("reveal-"+r);box.style.display=box.style.display==="block"?"none":"block"} if(c){completed[c]=true;saveTodayCompletion();const card=document.getElementById("card-"+c);if(card)card.style.borderColor="#a7f3d0";markTodayCompleteIfReady();updateProgressDisplay()}});
-resetButton.addEventListener("click",()=>{completed={theory:false,programming:false};saveTodayCompletion();document.querySelectorAll("textarea").forEach(a=>a.value="");document.querySelectorAll(".reveal-box").forEach(b=>b.style.display="none");document.querySelectorAll(".question-card").forEach(c=>c.style.borderColor="var(--border)");updateProgressDisplay()});
-loadTodayCompletion();renderDailyQuestions();renderBankPreview();updateProgressDisplay();
-if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("service-worker.js").catch(()=>console.log("Service worker registration failed."))})}
-</script>
+  <main>
+    <section class="top-panel" aria-label="Revision summary">
+      <div class="panel">
+        <h2>Choose what you have covered</h2>
+        <p>Select the topics you want included. Your choices are saved on this device.</p>
+        <p>Use <strong>Final revision mode</strong> when you want every card available.</p>
+      </div>
+      <div class="panel">
+        <h2>Your sprint stats</h2>
+        <div class="stats">
+          <div class="stat"><strong id="todayDone">0</strong><span>Done today</span></div>
+          <div class="stat"><strong id="currentStreak">0</strong><span>Daily streak</span></div>
+          <div class="stat"><strong id="weakCount">0</strong><span>Weak cards</span></div>
+          <div class="stat"><strong id="sessionScore">0</strong><span>This session</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="topic-panel" aria-label="Specification area selection">
+      <details id="topicDetails">
+        <summary class="topic-summary">
+          <div>
+            <h2>Specification areas to include</h2>
+            <span id="topicSummaryText">Show or hide topic choices</span>
+          </div>
+          <span>▾</span>
+        </summary>
+        <div class="topic-top">
+          <div>
+            <p>Untick areas you have not covered yet. These choices are saved on this device.</p>
+          </div>
+          <div class="topic-actions">
+            <button id="selectAllButton" class="secondary">Select all</button>
+            <button id="clearAllButton" class="secondary">Clear all</button>
+            <button id="finalRevisionButton">Final revision mode</button>
+          </div>
+        </div>
+        <div id="topicGrid" class="topic-grid"></div>
+      </details>
+      <div id="coverageNote" class="coverage-note">Selected specification areas: 0</div>
+    </section>
+
+    <section class="controls" aria-label="Flashcard controls">
+      <div>
+        <label for="modeSelect">Mode</label>
+        <select id="modeSelect">
+          <option value="daily10">Daily 10</option>
+          <option value="weak">Weakest first</option>
+          <option value="sprint">Topic sprint</option>
+          <option value="all">All selected cards</option>
+        </select>
+      </div>
+      <div>
+        <label for="paperSelect">Paper</label>
+        <select id="paperSelect">
+          <option value="all">All</option>
+          <option value="Paper 1">Paper 1</option>
+          <option value="Paper 2">Paper 2</option>
+        </select>
+      </div>
+      <button id="startButton">Start sprint</button>
+    </section>
+
+    <section class="flashcard" aria-live="polite">
+      <div class="card-meta">
+        <div class="tag-row" id="tagRow"></div>
+        <div class="progress-text" id="progressText">Card 0 / 0</div>
+      </div>
+      <div class="prompt" id="prompt">Choose your topics, then start your sprint.</div>
+      <div id="codeBlock"></div>
+      <div class="answer" id="answerBox"></div>
+      <div class="card-actions">
+        <button id="revealButton">Reveal answer</button>
+        <button id="gotItButton" class="success">Got it</button>
+        <button id="nearlyButton" class="amber">Nearly</button>
+        <button id="reviseButton" class="danger">Revise again</button>
+        <button id="skipButton" class="secondary">Skip</button>
+      </div>
+    </section>
+
+    <section class="summary-panel" id="summaryPanel"></section>
+
+    <section class="bank-panel">
+      <details>
+        <summary>Teacher preview: flashcard bank</summary>
+        <div id="bankList" class="bank-list"></div>
+      </details>
+    </section>
+
+    <footer>
+      <p>Suggested routine: select covered topics, complete Daily 10, then repeat weak cards.</p>
+    </footer>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "gcseComputingFlashcardsWithTopicsV1";
+
+    const flashcards = [
+      { id: "p1-001", paper: "Paper 1", topic: "CPU", type: "Definition", front: "What is the purpose of the CPU?", back: "The CPU executes instructions, performs calculations and controls the flow of data around the computer system.", tip: "Use the words execute, process and control." },
+      { id: "p1-002", paper: "Paper 1", topic: "CPU", type: "Component", front: "What does the ALU do?", back: "The Arithmetic Logic Unit performs arithmetic operations and logical comparisons such as AND, OR and NOT.", tip: "Do not confuse this with the Control Unit." },
+      { id: "p1-003", paper: "Paper 1", topic: "CPU", type: "Component", front: "What does the Control Unit do?", back: "It controls the execution of instructions and coordinates the activity of the CPU and other components.", tip: "Think: fetch, decode, execute control." },
+      { id: "p1-004", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the Program Counter?", back: "It stores the memory address of the next instruction to be fetched.", tip: "PC means next instruction address." },
+      { id: "p1-005", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the Accumulator?", back: "It temporarily stores the results of calculations performed by the ALU.", tip: "Accumulator = temporary calculation result." },
+      { id: "p1-006", paper: "Paper 1", topic: "CPU performance", type: "Explain", front: "How can increasing clock speed improve performance?", back: "A higher clock speed means more cycles per second, so the CPU may be able to execute more instructions in the same time.", tip: "Say 'may' because other factors also affect performance." },
+      { id: "p1-007", paper: "Paper 1", topic: "CPU performance", type: "Explain", front: "How can more cache improve CPU performance?", back: "Cache is very fast memory close to the CPU. More cache can reduce the need to fetch data from slower RAM.", tip: "Cache is faster than RAM, but smaller." },
+      { id: "p1-008", paper: "Paper 1", topic: "Memory", type: "Compare", front: "Give one difference between RAM and ROM.", back: "RAM is volatile and stores currently used programs/data. ROM is non-volatile and stores boot instructions or firmware.", tip: "Use direct comparison: RAM..., whereas ROM..." },
+      { id: "p1-009", paper: "Paper 1", topic: "Memory", type: "Definition", front: "What is virtual memory?", back: "Virtual memory is part of secondary storage used as extra memory when RAM is full.", tip: "Remember: it is slower than RAM." },
+      { id: "p1-010", paper: "Paper 1", topic: "Storage", type: "Compare", front: "Why is an SSD usually faster than an HDD?", back: "An SSD has no moving parts and accesses data electronically, giving faster access times than an HDD.", tip: "Do not say it is faster because it has more capacity." },
+      { id: "p1-011", paper: "Paper 1", topic: "Storage", type: "Factors", front: "Name three factors affecting the choice of secondary storage.", back: "Capacity, speed, cost, portability, durability, reliability and power consumption are possible factors.", tip: "Factors, not examples of devices." },
+      { id: "p1-012", paper: "Paper 1", topic: "Networks", type: "Definition", front: "What is a LAN?", back: "A Local Area Network covers a small geographical area such as a school, home or office.", tip: "Small area = LAN." },
+      { id: "p1-013", paper: "Paper 1", topic: "Networks", type: "Definition", front: "What is a WAN?", back: "A Wide Area Network covers a large geographical area and often connects multiple LANs.", tip: "The internet is the largest WAN." },
+      { id: "p1-014", paper: "Paper 1", topic: "Networks", type: "Device", front: "What does a router do?", back: "A router connects networks together and forwards data packets between them using suitable routes.", tip: "Router = between networks." },
+      { id: "p1-015", paper: "Paper 1", topic: "Networks", type: "Device", front: "What does a switch do?", back: "A switch connects devices on a LAN and forwards data to the correct device using MAC addresses.", tip: "Switch = within a LAN." },
+      { id: "p1-016", paper: "Paper 1", topic: "Networks", type: "Topology", front: "Give one advantage of a star topology.", back: "If one cable or device fails, the rest of the network can usually continue working. It is also easier to add devices and identify faults.", tip: "Do not ignore the central switch weakness." },
+      { id: "p1-017", paper: "Paper 1", topic: "Network security", type: "Security", front: "How does a firewall protect a network?", back: "It monitors incoming and outgoing traffic and uses rules to allow or block traffic.", tip: "Firewall is not antivirus." },
+      { id: "p1-018", paper: "Paper 1", topic: "Network security", type: "Security", front: "What is encryption?", back: "Encryption converts data into an unreadable form so it cannot be understood without the correct key.", tip: "It does not stop interception; it protects meaning." },
+      { id: "p1-019", paper: "Paper 1", topic: "Cyber security", type: "Threat", front: "What is phishing?", back: "Phishing uses fake messages or websites to trick users into revealing sensitive information.", tip: "Key idea: deception." },
+      { id: "p1-020", paper: "Paper 1", topic: "Cyber security", type: "Threat", front: "What is malware?", back: "Malware is malicious software designed to damage, disrupt, steal data or gain unauthorised access.", tip: "Examples include viruses, worms, Trojans and ransomware." },
+      { id: "p1-021", paper: "Paper 1", topic: "System software", type: "Function", front: "Name three functions of an operating system.", back: "User interface, memory management, file management, device management, process management, security and user accounts.", tip: "Application software is not the same as system software." },
+      { id: "p1-022", paper: "Paper 1", topic: "Data representation", type: "Definition", front: "What is a bit?", back: "A bit is a binary digit: either 0 or 1.", tip: "8 bits = 1 byte." },
+      { id: "p1-023", paper: "Paper 1", topic: "Data representation", type: "Hex", front: "Why is hexadecimal used by programmers?", back: "It is shorter than binary, easier for humans to read, and maps neatly because one hex digit represents four bits.", tip: "Computers still store data in binary." },
+      { id: "p1-024", paper: "Paper 1", topic: "Images", type: "Explain", front: "How does colour depth affect an image?", back: "Higher colour depth uses more bits per pixel, allowing more colours but increasing file size.", tip: "Colour depth is not resolution." },
+      { id: "p1-025", paper: "Paper 1", topic: "Images", type: "Explain", front: "How does resolution affect an image?", back: "Higher resolution means more pixels, usually giving more detail but increasing file size.", tip: "Resolution = number of pixels." },
+      { id: "p1-026", paper: "Paper 1", topic: "Sound", type: "Explain", front: "How does sample rate affect sound quality and file size?", back: "A higher sample rate takes more samples per second, improving accuracy but increasing file size.", tip: "Sample rate is samples per second." },
+      { id: "p1-027", paper: "Paper 1", topic: "Sound", type: "Explain", front: "How does bit depth affect sound?", back: "Higher bit depth gives more possible values for each sample, improving accuracy but increasing file size.", tip: "Bit depth is not sample rate." },
+      { id: "p1-028", paper: "Paper 1", topic: "Compression", type: "Compare", front: "What is the difference between lossy and lossless compression?", back: "Lossy permanently removes some data and may reduce quality. Lossless allows the original file to be restored exactly.", tip: "Lossless does not mean no size reduction." },
+      { id: "p1-029", paper: "Paper 1", topic: "Ethics and law", type: "Law", front: "Why is copyright important for software?", back: "It protects creators from unauthorised copying and allows them to earn money from their work.", tip: "Copyright protects creative work." },
+      { id: "p1-030", paper: "Paper 1", topic: "Ethics and law", type: "Ethics", front: "Give one ethical issue linked to collecting personal data.", back: "Privacy, consent, misuse of data, bias, and data being shared without clear permission are ethical concerns.", tip: "Ethical does not always mean illegal." },
+
+      { id: "p2-001", paper: "Paper 2", topic: "Algorithms", type: "Definition", front: "What is an algorithm?", back: "A step-by-step set of instructions used to solve a problem.", tip: "It does not have to be written in a programming language." },
+      { id: "p2-002", paper: "Paper 2", topic: "Algorithms", type: "Testing", front: "Why are algorithms tested?", back: "To check they produce correct outputs, handle different inputs and identify logic errors.", tip: "Testing is not just finding syntax errors." },
+      { id: "p2-003", paper: "Paper 2", topic: "Trace tables", type: "Purpose", front: "Why is a trace table useful?", back: "It shows how variable values change step by step, helping identify logic errors.", tip: "Mention variables changing over time." },
+      { id: "p2-004", paper: "Paper 2", topic: "Searching", type: "Algorithm", front: "How does a linear search work?", back: "It checks each item in order until the target is found or the list ends.", tip: "Linear search works on unsorted lists." },
+      { id: "p2-005", paper: "Paper 2", topic: "Searching", type: "Algorithm", front: "How does a binary search work?", back: "It repeatedly checks the middle item and discards half the list each time. The list must be sorted.", tip: "Sorted list is essential." },
+      { id: "p2-006", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "How does a bubble sort work?", back: "It compares adjacent items and swaps them if they are in the wrong order, repeating passes until sorted.", tip: "Adjacent comparisons are key." },
+      { id: "p2-007", paper: "Paper 2", topic: "Programming basics", type: "Definition", front: "What is a variable?", back: "A named memory location used to store a value that may change while the program runs.", tip: "Variable values can change." },
+      { id: "p2-008", paper: "Paper 2", topic: "Programming basics", type: "Definition", front: "What is a constant?", back: "A named value that should not change while the program runs.", tip: "Useful for values such as VAT rates or max scores." },
+      { id: "p2-009", paper: "Paper 2", topic: "Data types", type: "Definition", front: "Name four common data types.", back: "Integer, real/float, Boolean, character and string are common data types.", tip: "Boolean is True/False." },
+      { id: "p2-010", paper: "Paper 2", topic: "Selection", type: "Concept", front: "What is selection?", back: "Selection allows a program to choose which instructions to run based on a condition.", tip: "Usually if, else or elif." },
+      { id: "p2-011", paper: "Paper 2", topic: "Iteration", type: "Concept", front: "What is iteration?", back: "Iteration is repetition. It allows code to run multiple times, often using for or while loops.", tip: "Iteration = loops." },
+      { id: "p2-012", paper: "Paper 2", topic: "Subprograms", type: "Purpose", front: "Why are subprograms useful?", back: "They break programs into smaller parts, reduce repetition, make code easier to test and improve readability.", tip: "Use terms: modular, reusable, maintainable." },
+      { id: "p2-013", paper: "Paper 2", topic: "Validation", type: "Definition", front: "What is validation?", back: "Validation checks whether input is sensible or acceptable before it is processed.", tip: "Validation does not prove data is true." },
+      { id: "p2-014", paper: "Paper 2", topic: "Validation", type: "Examples", front: "Name three validation checks.", back: "Presence check, range check, length check, format check, type check and lookup check.", tip: "Learn examples and when to use them." },
+      { id: "p2-015", paper: "Paper 2", topic: "Defensive design", type: "Concept", front: "What is defensive design?", back: "Designing programs to reduce errors, handle unexpected input and make the program more robust.", tip: "Validation and authentication are examples." },
+      { id: "p2-016", paper: "Paper 2", topic: "Logic", type: "Boolean", front: "What does AND mean in a condition?", back: "AND means both conditions must be true for the whole condition to be true.", tip: "Both must pass." },
+      { id: "p2-017", paper: "Paper 2", topic: "Logic", type: "Boolean", front: "What does OR mean in a condition?", back: "OR means at least one condition must be true for the whole condition to be true.", tip: "One or both can pass." },
+      { id: "p2-018", paper: "Paper 2", topic: "Logic", type: "Boolean", front: "What does NOT do in Boolean logic?", back: "NOT reverses a Boolean value: True becomes False and False becomes True.", tip: "NOT inverts." },
+      { id: "p2-019", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "x = 5\ny = 3\nprint(x * y)", back: "15", tip: "The expression is evaluated before printing." },
+      { id: "p2-020", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "for i in range(3):\n    print(i)", back: "0\n1\n2", tip: "range(3) gives 0, 1, 2." },
+      { id: "p2-021", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "score = 72\nif score >= 50:\n    print('Pass')\nelse:\n    print('Try again')", back: "Pass", tip: "Only one branch of if/else runs." },
+      { id: "p2-022", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "word = 'computer'\nprint(word[0])\nprint(word[3])", back: "c\np", tip: "String indexing starts at 0." },
+      { id: "p2-023", paper: "Paper 2", topic: "Programming", type: "Predict output", front: "What is the output?", code: "total = 0\nfor i in range(1, 4):\n    total = total + i\nprint(total)", back: "6", tip: "range(1, 4) gives 1, 2, 3." },
+      { id: "p2-024", paper: "Paper 2", topic: "Programming", type: "Logic error", front: "Correct the average calculation.", code: "average = a + b + c / 3", back: "average = (a + b + c) / 3", tip: "Brackets force the addition before division." },
+      { id: "p2-025", paper: "Paper 2", topic: "Programming", type: "Validation", front: "Complete the condition: repeat while age is outside 11 to 16 inclusive.", code: "while __________:\n    age = int(input('Enter age: '))", back: "age < 11 or age > 16", tip: "Use OR because either invalid case should repeat." },
+      { id: "p2-026", paper: "Paper 2", topic: "Programming", type: "Subprogram", front: "What is the output?", code: "def double(number):\n    return number * 2\n\nprint(double(6))", back: "12", tip: "return sends the value back to be printed." },
+      { id: "p2-027", paper: "Paper 2", topic: "Programming", type: "Lists", front: "What is the output?", code: "scores = [3, 5, 8, 2]\nprint(scores[2])\nscores.append(10)\nprint(len(scores))", back: "8\n5", tip: "Index 2 is the third item." },
+      { id: "p2-028", paper: "Paper 2", topic: "Programming", type: "Boolean", front: "What is the output?", code: "x = 7\ny = 12\nprint(x > 5 and y < 10)", back: "False", tip: "AND requires both parts to be true." },
+      { id: "p2-029", paper: "Paper 2", topic: "Programming", type: "While loop", front: "What is the output?", code: "count = 1\nwhile count < 4:\n    print(count)\n    count = count + 1", back: "1\n2\n3", tip: "4 is not printed because the condition becomes false." },
+      { id: "p2-030", paper: "Paper 2", topic: "Programming", type: "File handling", front: "Explain what this code does.", code: "file = open('names.txt', 'a')\nfile.write('Asha\\n')\nfile.close()", back: "It opens names.txt in append mode, writes Asha on a new line, and closes the file.", tip: "Append adds to the end rather than replacing the file." }
+
+      ,{ id: "p1-031", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the MAR?", back: "The Memory Address Register stores the address of the memory location currently being read from or written to.", tip: "MAR stores an address, not the data itself." }
+      ,{ id: "p1-032", paper: "Paper 1", topic: "CPU", type: "Register", front: "What is the purpose of the MDR?", back: "The Memory Data Register stores the data that has just been fetched from memory or is about to be written to memory.", tip: "MDR stores data; MAR stores the address." }
+      ,{ id: "p1-033", paper: "Paper 1", topic: "CPU", type: "Explain", front: "Describe the fetch-execute cycle in simple terms.", back: "The CPU fetches the next instruction from memory, decodes what it means, then executes it. The program counter is updated so the next instruction can be fetched.", tip: "Use fetch, decode and execute." }
+      ,{ id: "p1-034", paper: "Paper 1", topic: "Embedded systems", type: "Definition", front: "What is an embedded system?", back: "A computer system built into another device, usually designed to perform a specific task.", tip: "Examples include washing machines, traffic lights and microwaves." }
+      ,{ id: "p1-035", paper: "Paper 1", topic: "Data units", type: "Recall", front: "Put these data units in order from smallest to largest: byte, bit, megabyte, nibble, kilobyte.", back: "bit, nibble, byte, kilobyte, megabyte.", tip: "A nibble is 4 bits; a byte is 8 bits." }
+      ,{ id: "p1-036", paper: "Paper 1", topic: "Data units", type: "Calculation", front: "How is the file size of an image calculated?", back: "Image file size = width in pixels × height in pixels × colour depth in bits.", tip: "Convert bits to bytes if the question asks for bytes." }
+      ,{ id: "p1-037", paper: "Paper 1", topic: "Data units", type: "Calculation", front: "How is the file size of a sound file calculated?", back: "Sound file size = sample rate × duration in seconds × bit depth.", tip: "Sample rate is measured in Hertz." }
+      ,{ id: "p1-038", paper: "Paper 1", topic: "Characters", type: "Explain", front: "Why can Unicode represent more characters than ASCII?", back: "Unicode uses more bits per character, so it can represent a much larger number of possible characters and symbols.", tip: "More bits means more possible combinations." }
+      ,{ id: "p1-039", paper: "Paper 1", topic: "Binary and hex", type: "Explain", front: "What is overflow in binary addition?", back: "Overflow occurs when the result of a binary calculation is too large to fit in the number of bits available.", tip: "For 8 bits, values above 255 overflow." }
+      ,{ id: "p1-040", paper: "Paper 1", topic: "Binary and hex", type: "Explain", front: "What is the effect of a left binary shift?", back: "A left binary shift usually multiplies the number by 2 for each place shifted, as long as no significant bits are lost.", tip: "Left shift = multiply by powers of 2." }
+      ,{ id: "p1-041", paper: "Paper 1", topic: "Binary and hex", type: "Explain", front: "What is the effect of a right binary shift?", back: "A right binary shift usually divides the number by 2 for each place shifted, discarding bits that move beyond the right-hand end.", tip: "Right shift = divide by powers of 2." }
+      ,{ id: "p1-042", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the purpose of HTTPS?", back: "HTTPS is used to securely transfer web pages and data between a browser and a web server using encryption.", tip: "HTTPS is the secure version of HTTP." }
+      ,{ id: "p1-043", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the purpose of SMTP?", back: "SMTP is used to send emails from a client to a mail server or between mail servers.", tip: "SMTP sends mail." }
+      ,{ id: "p1-044", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the difference between POP and IMAP?", back: "POP downloads emails to a device, often removing them from the server. IMAP keeps emails on the server and synchronises them across devices.", tip: "IMAP is better for multiple devices." }
+      ,{ id: "p1-045", paper: "Paper 1", topic: "Network protocols", type: "Protocol", front: "What is the purpose of FTP?", back: "FTP is used to transfer files between computers over a network.", tip: "FTP = File Transfer Protocol." }
+      ,{ id: "p1-046", paper: "Paper 1", topic: "Network protocols", type: "Explain", front: "Why are layers used in network protocols?", back: "Layers split communication into manageable parts, allow different layers to be developed independently, and help standards work across different systems.", tip: "Benefits: modular, standardised, easier to manage." }
+      ,{ id: "p1-047", paper: "Paper 1", topic: "Networks", type: "Cloud", front: "Give two advantages and two disadvantages of cloud storage.", back: "Advantages include access from anywhere and easier backup. Disadvantages include needing internet access, possible subscription costs, and reliance on a provider.", tip: "Always link to the scenario if one is given." }
+      ,{ id: "p1-048", paper: "Paper 1", topic: "Network security", type: "Threat", front: "What is an SQL injection attack?", back: "An attacker enters SQL into an input field to try to view, change or delete data in a database.", tip: "It exploits poorly validated input." }
+      ,{ id: "p1-049", paper: "Paper 1", topic: "Network security", type: "Threat", front: "What is a denial of service attack?", back: "A DoS attack floods a system with traffic or requests so legitimate users cannot access the service.", tip: "The aim is disruption, not usually data theft." }
+      ,{ id: "p1-050", paper: "Paper 1", topic: "Network security", type: "Prevention", front: "How can user access levels improve security?", back: "They limit users to only the files, data and functions they need, reducing damage from mistakes or unauthorised access.", tip: "Least privilege is the core idea." }
+      ,{ id: "p1-051", paper: "Paper 1", topic: "Utility software", type: "Utility", front: "What is the purpose of defragmentation?", back: "Defragmentation rearranges files on a magnetic disk so related parts are stored together, improving access speed.", tip: "It is relevant to magnetic storage, not SSDs in the same way." }
+      ,{ id: "p1-052", paper: "Paper 1", topic: "Ethics and law", type: "Law", front: "What is the purpose of the Computer Misuse Act?", back: "It makes unauthorised access to computer systems and related offences illegal.", tip: "Think hacking and unauthorised access." }
+      ,{ id: "p1-053", paper: "Paper 1", topic: "Ethics and law", type: "Law", front: "What is the purpose of the Data Protection Act 2018?", back: "It controls how personal data should be collected, stored, processed and protected.", tip: "Focus on personal data and rights." }
+      ,{ id: "p1-054", paper: "Paper 1", topic: "Ethics and law", type: "Licence", front: "Compare open source and proprietary software licences.", back: "Open source software gives access to the source code and allows it to be modified. Proprietary software usually keeps the source code private and restricts copying or modification.", tip: "A comparison must mention both sides." }
+      ,{ id: "p2-031", paper: "Paper 2", topic: "Computational thinking", type: "Definition", front: "What is abstraction?", back: "Abstraction means removing unnecessary detail and focusing on the important parts of a problem.", tip: "Abstraction helps simplify complex problems." }
+      ,{ id: "p2-032", paper: "Paper 2", topic: "Computational thinking", type: "Definition", front: "What is decomposition?", back: "Decomposition means breaking a large problem into smaller, more manageable sub-problems.", tip: "Decompose before designing the solution." }
+      ,{ id: "p2-033", paper: "Paper 2", topic: "Searching", type: "Algorithm", front: "What must be true before a binary search can be used?", back: "The data must be sorted into order first.", tip: "Binary search repeatedly halves the search area." }
+      ,{ id: "p2-034", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "Describe one pass of a bubble sort.", back: "Adjacent items are compared and swapped if they are in the wrong order. This continues along the list, moving a larger item towards the end.", tip: "Bubble sort compares neighbours." }
+      ,{ id: "p2-035", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "Describe the main idea of insertion sort.", back: "Insertion sort takes each item and inserts it into the correct position within the already sorted part of the list.", tip: "Like sorting playing cards in your hand." }
+      ,{ id: "p2-036", paper: "Paper 2", topic: "Sorting", type: "Algorithm", front: "Describe the main idea of merge sort.", back: "Merge sort repeatedly splits a list into smaller lists, then merges them back together in sorted order.", tip: "Split, then merge in order." }
+      ,{ id: "p2-037", paper: "Paper 2", topic: "Programming basics", type: "Operator", front: "What is the difference between DIV and MOD?", back: "DIV gives the whole-number quotient after division. MOD gives the remainder.", tip: "17 DIV 5 = 3; 17 MOD 5 = 2." }
+      ,{ id: "p2-038", paper: "Paper 2", topic: "Data types", type: "Casting", front: "Why might a program cast a string to an integer?", back: "Input is often received as text. Casting to integer allows the value to be used in calculations.", tip: "Example: int(ageInput)." }
+      ,{ id: "p2-039", paper: "Paper 2", topic: "Strings", type: "Manipulation", front: "Name two basic string manipulation techniques in the OCR specification.", back: "Concatenation and slicing are required. Length, uppercase and lowercase are also useful in OCR reference language.", tip: "Concatenation joins strings; slicing extracts part." }
+      ,{ id: "p2-040", paper: "Paper 2", topic: "Arrays", type: "Definition", front: "What is a one-dimensional array?", back: "A fixed-length data structure that stores multiple values of the same data type using one index.", tip: "OCR arrays are zero-indexed." }
+      ,{ id: "p2-041", paper: "Paper 2", topic: "Arrays", type: "Definition", front: "How can a 2D array be used?", back: "A 2D array can store data in rows and columns, such as a grid or a simple table of records and fields.", tip: "Use two indexes: row and column." }
+      ,{ id: "p2-042", paper: "Paper 2", topic: "Records", type: "Definition", front: "What is a record?", back: "A record stores related data about one item or person, usually made up of several fields.", tip: "Example: one student record may contain name, form and score." }
+      ,{ id: "p2-043", paper: "Paper 2", topic: "SQL", type: "Syntax", front: "What do SELECT, FROM and WHERE do in SQL?", back: "SELECT chooses the fields to display, FROM chooses the table, and WHERE sets the condition used to filter records.", tip: "OCR only requires simple SELECT, FROM and WHERE." }
+      ,{ id: "p2-044", paper: "Paper 2", topic: "File handling", type: "Process", front: "Name four basic file handling operations.", back: "Open, read, write and close.", tip: "Always close the file after use." }
+      ,{ id: "p2-045", paper: "Paper 2", topic: "Subprograms", type: "Compare", front: "What is the difference between a function and a procedure?", back: "A function returns a value. A procedure performs a task but does not have to return a value.", tip: "Return value = function." }
+      ,{ id: "p2-046", paper: "Paper 2", topic: "Subprograms", type: "Scope", front: "What is the difference between a local and global variable?", back: "A local variable is only available within the subprogram or block where it is created. A global variable can be accessed more widely across the program.", tip: "Avoid overusing globals." }
+      ,{ id: "p2-047", paper: "Paper 2", topic: "Random numbers", type: "Use", front: "Give one use of random number generation in a program.", back: "It can be used for games, simulations, quizzes, testing, or selecting a random item.", tip: "OCR may ask for use in a scenario." }
+      ,{ id: "p2-048", paper: "Paper 2", topic: "Testing", type: "Test data", front: "What is boundary test data?", back: "Boundary test data is valid or invalid data at the edge of an accepted range.", tip: "For 1 to 10, boundary values include 1, 10, 0 and 11." }
+      ,{ id: "p2-049", paper: "Paper 2", topic: "Testing", type: "Test data", front: "What is the difference between invalid and erroneous test data?", back: "Invalid data is the correct data type but outside the allowed range. Erroneous data is the wrong data type and should be rejected.", tip: "Example: age 200 is invalid; age 'cat' is erroneous." }
+      ,{ id: "p2-050", paper: "Paper 2", topic: "Testing", type: "Error", front: "What is the difference between a syntax error and a logic error?", back: "A syntax error breaks the rules of the language and may stop the program running. A logic error allows the program to run but gives the wrong result.", tip: "Logic errors are often harder to spot." }
+      ,{ id: "p2-051", paper: "Paper 2", topic: "IDE", type: "Tool", front: "Name three tools or facilities commonly found in an IDE.", back: "Editor, error diagnostics, run-time environment and translator.", tip: "Explain how each helps the programmer if asked." }
+      ,{ id: "p2-052", paper: "Paper 2", topic: "Languages", type: "Compare", front: "Compare high-level and low-level programming languages.", back: "High-level languages are closer to human language and easier to write. Low-level languages are closer to machine code and give more direct hardware control.", tip: "Mention ease for humans and closeness to hardware." }
+      ,{ id: "p2-053", paper: "Paper 2", topic: "Languages", type: "Translator", front: "What is the difference between a compiler and an interpreter?", back: "A compiler translates the whole program before running. An interpreter translates and runs the program one line at a time.", tip: "Each has benefits and drawbacks." }
+      ,{ id: "p2-054", paper: "Paper 2", topic: "OCR Reference Language", type: "Syntax", front: "In OCR reference language, what does this mean?", code: "for i = 0 to 9\n  print(i)\nnext i", back: "It is a count-controlled loop that prints the values 0 through 9 inclusive.", tip: "OCR for loops include the final value." }
+      ,{ id: "p2-055", paper: "Paper 2", topic: "OCR Reference Language", type: "Syntax", front: "In OCR reference language, what does .substring(x, i) do?", back: "It returns a substring starting at index x with length i. Indexing starts at 0.", tip: "x is the start; i is the number of characters." }
+    ];
+
+    let deck = [];
+    let currentIndex = 0;
+    let session = { got: 0, nearly: 0, revise: 0, skipped: 0 };
+
+    const topicGrid = document.getElementById("topicGrid");
+    const coverageNote = document.getElementById("coverageNote");
+    const selectAllButton = document.getElementById("selectAllButton");
+    const clearAllButton = document.getElementById("clearAllButton");
+    const finalRevisionButton = document.getElementById("finalRevisionButton");
+    const modeSelect = document.getElementById("modeSelect");
+    const paperSelect = document.getElementById("paperSelect");
+    const startButton = document.getElementById("startButton");
+    const tagRow = document.getElementById("tagRow");
+    const progressText = document.getElementById("progressText");
+    const promptElement = document.getElementById("prompt");
+    const codeBlock = document.getElementById("codeBlock");
+    const answerBox = document.getElementById("answerBox");
+    const revealButton = document.getElementById("revealButton");
+    const gotItButton = document.getElementById("gotItButton");
+    const nearlyButton = document.getElementById("nearlyButton");
+    const reviseButton = document.getElementById("reviseButton");
+    const skipButton = document.getElementById("skipButton");
+    const summaryPanel = document.getElementById("summaryPanel");
+    const todayDone = document.getElementById("todayDone");
+    const currentStreak = document.getElementById("currentStreak");
+    const weakCount = document.getElementById("weakCount");
+    const sessionScore = document.getElementById("sessionScore");
+    const bankList = document.getElementById("bankList");
+
+    const specLabels = {
+      "CPU": "1.1 Systems architecture: CPU",
+      "CPU performance": "1.1 Systems architecture: CPU performance",
+      "Memory": "1.2 Memory and storage: Primary memory",
+      "Storage": "1.2 Memory and storage: Secondary storage",
+      "Networks": "1.3 Computer networks, connections and protocols",
+      "Network security": "1.4 Network security",
+      "Cyber security": "1.4 Network security: Threats and prevention",
+      "System software": "1.5 Systems software",
+      "Data representation": "1.2 Memory/storage and data representation: Binary and hex",
+      "Images": "1.2 Data representation: Images",
+      "Sound": "1.2 Data representation: Sound",
+      "Compression": "1.2 Data representation: Compression",
+      "Ethics and law": "1.6 Ethical, legal, cultural and environmental impacts",
+      "Algorithms": "2.1 Algorithms",
+      "Trace tables": "2.1 Algorithms: Trace tables",
+      "Searching": "2.1 Algorithms: Searching",
+      "Sorting": "2.1 Algorithms: Sorting",
+      "Programming basics": "2.2 Programming fundamentals",
+      "Data types": "2.2 Programming fundamentals: Data types",
+      "Selection": "2.2 Programming fundamentals: Selection",
+      "Iteration": "2.2 Programming fundamentals: Iteration",
+      "Subprograms": "2.2 Programming fundamentals: Subprograms",
+      "Validation": "2.4 Boolean logic / 2.5 Languages and IDEs: Validation practice",
+      "Defensive design": "2.3 Producing robust programs: Defensive design",
+      "Logic": "2.4 Boolean logic",
+      "Programming": "2.2–2.3 Programming practice"
+
+      ,"Embedded systems": "1.1 Systems architecture: Embedded systems"
+      ,"Data units": "1.2 Memory and storage: Units and file size calculations"
+      ,"Characters": "1.2 Data representation: Characters and character sets"
+      ,"Binary and hex": "1.2 Data representation: Binary, hexadecimal and shifts"
+      ,"Network protocols": "1.3 Protocols, addressing, standards and layers"
+      ,"Utility software": "1.5 Systems software: Utility software"
+      ,"Computational thinking": "2.1 Algorithms: Computational thinking"
+      ,"Strings": "2.2 Programming fundamentals: String manipulation"
+      ,"Arrays": "2.2 Additional programming techniques: 1D and 2D arrays"
+      ,"Records": "2.2 Additional programming techniques: Records"
+      ,"SQL": "2.2 Additional programming techniques: SQL"
+      ,"File handling": "2.2 Additional programming techniques: File handling"
+      ,"Random numbers": "2.2 Additional programming techniques: Random numbers"
+      ,"Testing": "2.3 Producing robust programs: Testing"
+      ,"IDE": "2.5 Integrated Development Environments"
+      ,"Languages": "2.5 Programming languages and translators"
+      ,"OCR Reference Language": "3c OCR Exam Reference Language"
+    };
+
+    function specLabel(topic) {
+      return specLabels[topic] || topic;
+    }
+
+    function allTopics() {
+      return [...new Set(flashcards.map(card => card.topic))].sort((a, b) => specLabel(a).localeCompare(specLabel(b)));
+    }
+
+    function todayString() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function dayNumber() {
+      return Math.floor(new Date(todayString() + "T00:00:00").getTime() / 86400000);
+    }
+
+    function defaultProgress() {
+      return { daily: {}, streak: 0, lastDate: null, weak: [], selectedTopics: allTopics() };
+    }
+
+    function loadProgress() {
+      const fallback = defaultProgress();
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (!saved) return fallback;
+        if (!saved.selectedTopics || !Array.isArray(saved.selectedTopics)) {
+          saved.selectedTopics = allTopics();
+        } else {
+          // Preserve existing student choices, but include any newly added specification topics.
+          const currentTopics = allTopics();
+          currentTopics.forEach(function(topic) {
+            if (!saved.selectedTopics.includes(topic)) saved.selectedTopics.push(topic);
+          });
+          saved.selectedTopics = saved.selectedTopics.filter(function(topic) {
+            return currentTopics.includes(topic);
+          });
+        }
+        if (!saved.daily) saved.daily = {};
+        if (!saved.weak) saved.weak = [];
+        return saved;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveProgress(progress) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function seededDailyCards(cards, count) {
+      if (cards.length === 0) return [];
+      const start = dayNumber() % cards.length;
+      const result = [];
+      for (let i = 0; i < Math.min(count, cards.length); i++) {
+        result.push(cards[(start + i * 7) % cards.length]);
+      }
+      return result;
+    }
+
+    function selectedTopics() {
+      const progress = loadProgress();
+      return progress.selectedTopics || allTopics();
+    }
+
+    function saveSelectedTopics(topics) {
+      const progress = loadProgress();
+      progress.selectedTopics = topics;
+      saveProgress(progress);
+      updateCoverageNote();
+    }
+
+    function renderTopicChoices() {
+      const selected = new Set(selectedTopics());
+      topicGrid.innerHTML = allTopics().map(topic => {
+        const checked = selected.has(topic) ? "checked" : "";
+        return "<label class='topic-choice'><input type='checkbox' value='" + escapeHtml(topic) + "' " + checked + ">" + escapeHtml(specLabel(topic)) + "</label>";
+      }).join("");
+      updateCoverageNote();
+    }
+
+    function currentTopicSelectionFromUI() {
+      return Array.from(topicGrid.querySelectorAll("input[type='checkbox']:checked")).map(input => input.value);
+    }
+
+    function updateCoverageNote() {
+      const selected = selectedTopics();
+      const selectedCards = flashcards.filter(card => selected.includes(card.topic));
+      coverageNote.textContent = "Selected specification areas: " + selected.length + " / " + allTopics().length + " | Available cards: " + selectedCards.length + " / " + flashcards.length;
+      const topicSummaryText = document.getElementById("topicSummaryText");
+      if (topicSummaryText) {
+        topicSummaryText.textContent = selected.length + " areas selected, " + selectedCards.length + " cards available";
+      }
+    }
+
+    function filteredCards() {
+      const topics = selectedTopics();
+      return flashcards.filter(card => {
+        const paperOk = paperSelect.value === "all" || card.paper === paperSelect.value;
+        const topicOk = topics.includes(card.topic);
+        return paperOk && topicOk;
+      });
+    }
+
+    function buildDeck() {
+      const mode = modeSelect.value;
+      const progress = loadProgress();
+      const weakIds = new Set(progress.weak || []);
+      let cards = filteredCards();
+
+      if (mode === "weak") {
+        cards = cards.filter(card => weakIds.has(card.id));
+      } else if (mode === "daily10") {
+        cards = seededDailyCards(cards, 10);
+      } else if (mode === "sprint") {
+        cards = shuffle(cards).slice(0, 10);
+      } else {
+        cards = shuffle(cards);
+      }
+
+      deck = cards;
+      currentIndex = 0;
+      session = { got: 0, nearly: 0, revise: 0, skipped: 0 };
+      summaryPanel.style.display = "none";
+      renderCard();
+      updateStats();
+    }
+
+    function renderCard() {
+      answerBox.style.display = "none";
+      answerBox.innerHTML = "";
+      codeBlock.innerHTML = "";
+
+      if (deck.length === 0) {
+        tagRow.innerHTML = "";
+        progressText.textContent = "Card 0 / 0";
+        promptElement.textContent = "No cards found. Select at least one topic, or check the Paper and Mode settings.";
+        return;
+      }
+
+      if (currentIndex >= deck.length) {
+        showSummary();
+        return;
+      }
+
+      const card = deck[currentIndex];
+      const progress = loadProgress();
+      const isWeak = (progress.weak || []).includes(card.id);
+
+      tagRow.innerHTML =
+        "<span class='tag " + (card.paper === "Paper 2" ? "paper2" : "") + "'>" + escapeHtml(card.paper) + "</span>" +
+        "<span class='tag'>" + escapeHtml(specLabel(card.topic)) + "</span>" +
+        "<span class='tag'>" + escapeHtml(card.type) + "</span>" +
+        (isWeak ? "<span class='tag weak'>Weak card</span>" : "");
+
+      progressText.textContent = "Card " + (currentIndex + 1) + " / " + deck.length;
+      promptElement.textContent = card.front;
+
+      if (card.code) {
+        codeBlock.innerHTML = "<pre><code>" + escapeHtml(card.code) + "</code></pre>";
+      }
+    }
+
+    function revealAnswer() {
+      if (deck.length === 0 || currentIndex >= deck.length) return;
+      const card = deck[currentIndex];
+      answerBox.innerHTML =
+        "<h3>Answer</h3><p>" + escapeHtml(card.back).replace(/\n/g, "<br>") + "</p>" +
+        "<div class='exam-tip'><strong>Exam tip:</strong> " + escapeHtml(card.tip) + "</div>";
+      answerBox.style.display = "block";
+    }
+
+    function rateCard(rating) {
+      if (deck.length === 0 || currentIndex >= deck.length) return;
+      const card = deck[currentIndex];
+      const progress = loadProgress();
+      progress.weak = progress.weak || [];
+
+      if (rating === "got") {
+        session.got++;
+        progress.weak = progress.weak.filter(id => id !== card.id);
+      } else if (rating === "nearly") {
+        session.nearly++;
+      } else if (rating === "revise") {
+        session.revise++;
+        if (!progress.weak.includes(card.id)) progress.weak.push(card.id);
+      } else if (rating === "skip") {
+        session.skipped++;
+      }
+
+      const today = todayString();
+      progress.daily = progress.daily || {};
+      progress.daily[today] = (progress.daily[today] || 0) + 1;
+
+      if (progress.lastDate !== today) {
+        const previous = progress.lastDate ? new Date(progress.lastDate + "T00:00:00") : null;
+        const current = new Date(today + "T00:00:00");
+        const diff = previous ? Math.round((current - previous) / 86400000) : null;
+        progress.streak = diff === 1 ? (progress.streak || 0) + 1 : 1;
+        progress.lastDate = today;
+      }
+
+      saveProgress(progress);
+      currentIndex++;
+      renderCard();
+      updateStats();
+    }
+
+    function showSummary() {
+      tagRow.innerHTML = "";
+      progressText.textContent = "Sprint complete";
+      promptElement.textContent = "Sprint complete.";
+      codeBlock.innerHTML = "";
+      answerBox.style.display = "none";
+      summaryPanel.innerHTML = "You completed " + deck.length + " cards. Got it: " + session.got + ", Nearly: " + session.nearly + ", Revise again: " + session.revise + ", Skipped: " + session.skipped + ".";
+      summaryPanel.style.display = "block";
+    }
+
+    function updateStats() {
+      const progress = loadProgress();
+      const today = todayString();
+      todayDone.textContent = progress.daily && progress.daily[today] ? progress.daily[today] : 0;
+      currentStreak.textContent = progress.streak || 0;
+      weakCount.textContent = progress.weak ? progress.weak.length : 0;
+      sessionScore.textContent = session.got + "/" + (session.got + session.nearly + session.revise + session.skipped);
+      updateCoverageNote();
+    }
+
+    function renderBankPreview() {
+      bankList.innerHTML = flashcards.map(card =>
+        "<div class='bank-item'><strong>" + escapeHtml(card.paper) + " | " + escapeHtml(specLabel(card.topic)) + " | " + escapeHtml(card.type) + "</strong><br>" + escapeHtml(card.front) + "</div>"
+      ).join("");
+    }
+
+    topicGrid.addEventListener("change", function() {
+      saveSelectedTopics(currentTopicSelectionFromUI());
+      buildDeck();
+    });
+
+    selectAllButton.addEventListener("click", function() {
+      saveSelectedTopics(allTopics());
+      renderTopicChoices();
+      buildDeck();
+    });
+
+    clearAllButton.addEventListener("click", function() {
+      saveSelectedTopics([]);
+      renderTopicChoices();
+      buildDeck();
+    });
+
+    finalRevisionButton.addEventListener("click", function() {
+      paperSelect.value = "all";
+      modeSelect.value = "daily10";
+      saveSelectedTopics(allTopics());
+      renderTopicChoices();
+      buildDeck();
+    });
+
+    startButton.addEventListener("click", buildDeck);
+    revealButton.addEventListener("click", revealAnswer);
+    gotItButton.addEventListener("click", () => rateCard("got"));
+    nearlyButton.addEventListener("click", () => rateCard("nearly"));
+    reviseButton.addEventListener("click", () => rateCard("revise"));
+    skipButton.addEventListener("click", () => rateCard("skip"));
+    paperSelect.addEventListener("change", buildDeck);
+    modeSelect.addEventListener("change", buildDeck);
+
+    renderTopicChoices();
+    renderBankPreview();
+    updateStats();
+    buildDeck();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js").catch(function() {
+          console.log("Service worker registration failed.");
+        });
+      });
+    }
+  </script>
 </body>
 </html>
