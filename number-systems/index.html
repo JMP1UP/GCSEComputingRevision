@@ -6,8 +6,8 @@
   <title>Binary, Hex and Denary Daily Practice</title>
   <meta name="theme-color" content="#111827" />
   <meta name="description" content="Daily GCSE practice for binary, hexadecimal and denary conversions." />
-  <link rel="manifest" href="Number%20Systems/manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../icon.svg" />
   <style>
     :root {
       --bg: #eef2f7;
@@ -386,13 +386,13 @@
     <section class="top-panel" aria-label="Daily practice summary">
       <div class="intro-card">
         <h2>Complete today’s five questions</h2>
-        <p>Each practice set includes one question from each key GCSE conversion skill, plus one binary addition question.</p>
+        <p>Each practice set includes GCSE conversion, binary addition and binary shift questions.</p>
         <p>Use <strong>Show working</strong> after trying a question, not before, to get the most benefit.</p>
       </div>
 
       <div class="progress-card">
         <h2>Your practice streak</h2>
-        <p id="streakMessage">Complete all five questions correctly to build your streak.</p>
+        <p id="streakMessage">Complete all questions correctly to build your streak.</p>
         <div class="stats">
           <div class="stat"><strong id="currentStreak">0</strong><span>Current streak</span></div>
           <div class="stat"><strong id="bestStreak">0</strong><span>Best streak</span></div>
@@ -431,7 +431,9 @@
       "denary-to-binary",
       "hex-to-denary",
       "hex-to-binary",
-      "binary-addition"
+      "binary-to-hex",
+      "binary-addition",
+      "binary-shift"
     ];
 
     const STORAGE_KEY = "numberPracticeProgressV1";
@@ -536,7 +538,7 @@
 
       streakMessageElement.textContent = completedToday
         ? "You have completed today’s practice. Come back tomorrow to continue your streak."
-        : "Complete all five questions correctly to build your streak.";
+        : "Complete all questions correctly to build your streak.";
     }
 
     function markTodayComplete() {
@@ -622,6 +624,37 @@
             working: hexToBinaryWorking(toHex(value))
           };
 
+
+
+        case "binary-to-hex":
+          value = randomInt(1, 255);
+          return {
+            type: type,
+            title: "Binary → Hex",
+            note: "Split the byte into two nibbles.",
+            prompt: "Convert " + renderBinaryWithPlaces(toEightBitBinary(value)) + " to hexadecimal.",
+            answer: toHex(value),
+            accepted: [toHex(value), toHex(value).replace(/^0/, "")],
+            hint: "Split into two groups of 4 bits, then convert each group to a hex digit.",
+            working: binaryToHexWorking(toEightBitBinary(value))
+          };
+
+        case "binary-shift":
+          value = randomInt(2, 127);
+          const direction = Math.random() < 0.5 ? "left" : "right";
+          const places = randomInt(1, 2);
+          const shifted = direction === "left" ? (value << places) & 255 : value >> places;
+          return {
+            type: type,
+            title: "Binary Shift",
+            note: "Shift and explain the effect.",
+            prompt: "Shift " + renderBinaryWithPlaces(toEightBitBinary(value)) + " " + places + " place" + (places === 1 ? "" : "s") + " to the " + direction + ".",
+            answer: toEightBitBinary(shifted),
+            accepted: [toEightBitBinary(shifted), shifted.toString(2), String(shifted)],
+            hint: direction === "left" ? "A left shift multiplies by 2 for each place shifted, unless overflow occurs." : "A right shift divides by 2 for each place shifted.",
+            working: binaryShiftWorking(value, direction, places, shifted)
+          };
+
         case "binary-addition":
           a = randomInt(1, 255);
           b = randomInt(1, 255);
@@ -676,6 +709,21 @@
       return hex[0] + " = " + first + "\n" + hex[1] + " = " + second + "\n\nAnswer: " + first + second;
     }
 
+
+
+    function binaryToHexWorking(binary) {
+      const first = binary.slice(0, 4);
+      const second = binary.slice(4);
+      const firstHex = parseInt(first, 2).toString(16).toUpperCase();
+      const secondHex = parseInt(second, 2).toString(16).toUpperCase();
+      return binary + "\nSplit into nibbles: " + first + " " + second + "\n" + first + " = " + firstHex + "\n" + second + " = " + secondHex + "\n\nAnswer: " + firstHex + secondHex;
+    }
+
+    function binaryShiftWorking(value, direction, places, shifted) {
+      const operation = direction === "left" ? "multiply by " + Math.pow(2, places) : "divide by " + Math.pow(2, places) + " and discard any remainder";
+      return "Original: " + toEightBitBinary(value) + " (" + value + ")\nShift " + direction + " by " + places + " place" + (places === 1 ? "" : "s") + "\nResult:   " + toEightBitBinary(shifted) + " (" + shifted + ")\n\nEffect: " + operation + ".";
+    }
+
     function binaryAdditionWorking(a, b) {
       const total = a + b;
       const overflowText = total > 255
@@ -695,7 +743,7 @@
     }
 
     function updateScore() {
-      scoreElement.textContent = "Score: " + score + " / " + (questions.length || 5);
+      scoreElement.textContent = "Score: " + score + " / " + (questions.length || 7);
     }
 
     function renderQuestions() {
